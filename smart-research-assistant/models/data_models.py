@@ -61,6 +61,26 @@ class VerificationResult(BaseModel):
     fact_checks: List[FactCheck] = Field(..., description="List of fact-checked claims.")
     overall_confidence: float = Field(..., description="Overall confidence in the verification.")
 
+class SummaryResult(BaseModel):
+    """Represents the result of a summarization query."""
+    query: str = Field(..., description="The original summary query.")
+    summary: str = Field(..., description="The generated summary.")
+    key_points: List[str] = Field(..., description="List of key points from the summary.")
+    themes: List[str] = Field(..., description="List of main themes identified in the text.")
+    categories: List[str] = Field(..., description="List of categories for the summarized content.")
+    source_documents: List[str] = Field(..., description="List of source documents used for summarization.")
+
+class ComparisonPoint(BaseModel):
+    """Represents a single point of comparison between two or more items."""
+    aspect: str = Field(..., description="The aspect being compared (e.g., 'performance', 'cost').")
+    comparison: str = Field(..., description="A summary of the comparison for this aspect.")
+
+class ComparativeAnalysisResult(BaseModel):
+    """Represents the result of a comparative analysis query."""
+    query: str = Field(..., description="The original comparison query.")
+    analysis_summary: str = Field(..., description="A high-level summary of the comparative analysis.")
+    comparison_points: List[ComparisonPoint] = Field(..., description="List of detailed comparison points.")
+
 @dataclass
 class ResearchFinding:
     """Represents a key finding from research."""

@@ -13,6 +13,7 @@ try:
     from .agents.orchestrator_agent import OrchestratorAgent
     from .agents.search_agent import SearchAgent
     from .agents.verification_agent import VerificationAgent
+    from .agents.summary_agent import SummaryAgent
     from .agents.specialized_agent import SpecializedAgent
     from .storage.storage_provider import StorageProvider
 except ImportError:
@@ -21,6 +22,7 @@ except ImportError:
     from agents.orchestrator_agent import OrchestratorAgent
     from agents.search_agent import SearchAgent
     from agents.verification_agent import VerificationAgent
+    from agents.summary_agent import SummaryAgent
     from agents.specialized_agent import SpecializedAgent
     from storage.storage_provider import StorageProvider
 
@@ -63,7 +65,7 @@ class SmartResearchAssistant:
         # Create specialized agents
         search_agent = SearchAgent(model=Config.SEARCH_MODEL)
         verification_agent = VerificationAgent(model=Config.VERIFICATION_MODEL)
-        summary_agent = SpecializedAgent(model=Config.SUMMARY_MODEL, name="SummaryAgent", agent_type="summary")
+        summary_agent = SummaryAgent(model=Config.SUMMARY_MODEL)
         analysis_agent = SpecializedAgent(model=Config.ANALYSIS_MODEL, name="AnalysisAgent", agent_type="analysis")
 
         # Register agents with the orchestrator
