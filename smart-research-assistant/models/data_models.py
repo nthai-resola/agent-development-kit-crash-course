@@ -47,6 +47,20 @@ class StructuredSearchResult(BaseModel):
     key_takeaways: List[str] = Field(..., description="Key insights or summaries from the results.")
     related_topics: List[str] = Field(..., description="Related topics for further research.")
 
+class FactCheck(BaseModel):
+    """Represents a single fact-checked claim."""
+    claim: str = Field(..., description="The claim being verified.")
+    is_verified: bool = Field(..., description="Indicates if the claim is verified.")
+    supporting_sources: List[str] = Field(..., description="List of sources that support the claim.")
+    conflicting_sources: List[str] = Field(..., description="List of sources that conflict with the claim.")
+    confidence_score: float = Field(..., description="Confidence in the verification result.")
+
+class VerificationResult(BaseModel):
+    """Represents the result of a verification query."""
+    query: str = Field(..., description="The original verification query.")
+    fact_checks: List[FactCheck] = Field(..., description="List of fact-checked claims.")
+    overall_confidence: float = Field(..., description="Overall confidence in the verification.")
+
 @dataclass
 class ResearchFinding:
     """Represents a key finding from research."""
