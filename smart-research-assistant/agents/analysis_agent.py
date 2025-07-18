@@ -6,7 +6,7 @@ import logging
 from typing import Dict, Any, List, Optional
 from pydantic import ValidationError, BaseModel, Field
 from pydantic_ai import Agent
-from models.data_models import AnalysisResult, TranslationResult, EntityExtractionResult, DataInsight
+from models.data_models import AnalysisResult, TranslationResult, EntityExtractionResult, DataInsight, VersionComparisonResult
 import matplotlib.pyplot as plt
 from agents.specialized_agent import SpecializedAgent
 
@@ -40,6 +40,8 @@ class AnalysisAgent(SpecializedAgent):
             return await self._handle_translation(query, context)
         if self._is_entity_extraction_query(query):
             return await self._handle_entity_extraction(query, context)
+        if self._is_version_comparison_query(query):
+            return await self._handle_version_comparison(query, context)
 
         try:
             analysis_result = await self._analyze_data(query, context)
@@ -83,6 +85,12 @@ class AnalysisAgent(SpecializedAgent):
         """
         return "extract entities" in query.lower()
 
+    def _is_version_comparison_query(self, query: str) -> bool:
+        """
+        Check if a query is a version comparison query.
+        """
+        return query.lower().startswith("compare versions:")
+
     async def _handle_translation(self, query: str, context: Dict[str, Any]) -> Dict[str, Any]:
         """
         Handle translation queries.
@@ -109,6 +117,19 @@ class AnalysisAgent(SpecializedAgent):
             logger.error(f"Error during entity extraction: {e}")
             return {"success": False, "content": "An error occurred during entity extraction."}
 
+    async def _handle_version_comparison(self, query: str, context: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Handle version comparison queries.
+        """
+        try:
+            comparison_result = await self._compare_versions(query, context)
+            if not comparison_result:
+                return {"success": False, "content": "Failed to perform version comparison."}
+            return {"success": True, "content": self._format_version_comparison_results(comparison_result)}
+        except Exception as e:
+            logger.error(f"Error during version comparison: {e}")
+            return {"success": False, "content": "An error occurred during version comparison."}
+
     async def _translate_text(self, query: str, context: Dict[str, Any]) -> TranslationResult:
         """
         Perform text translation using an LLM.
@@ -124,6 +145,31 @@ class AnalysisAgent(SpecializedAgent):
         text_to_extract = context.get("other_agent_results", {}).get("search", {}).get("content", "")
         prompt = f"Extract entities from the following text based on the query: '{query}'\n\nText: {text_to_extract}"
         return await self.analyzer.run(input_text=prompt, pydantic_model=EntityExtractionResult)
+
+    async def _compare_versions(self, query: str, context: Dict[str, Any]) -> VersionComparisonResult:
+        """
+        Perform version comparison using an LLM.
+        """
+        try:
+            _, texts = query.split(":", 1)
+            text_v1, text_v2 = texts.split(" vs ", 1)
+        except ValueError:
+            return None
+
+        prompt = f"""
+        Please compare the following two versions of text based on the query: '{query}'
+
+        Version 1:
+        {text_v1.strip()}
+
+        Version 2:
+        {text_v2.strip()}
+
+        Perform the following tasks:
+        1. Identify what has been added, removed, or changed between the two versions.
+        2. Provide a summary of the differences.
+        """
+        return await self.analyzer.run(input_text=prompt, pydantic_model=VersionComparisonResult)
 
     def _is_visualization_query(self, query: str) -> bool:
         """
@@ -194,6 +240,25 @@ class AnalysisAgent(SpecializedAgent):
         formatted_string = "Extracted Entities:\n\n"
         for entity in data.entities:
             formatted_string += f"- {entity.text} ({entity.type}) - Relevance: {entity.relevance:.2f}\n"
+        return formatted_string
+
+    def _format_version_comparison_results(self, data: VersionComparisonResult) -> str:
+        """
+        Format the version comparison results into a readable string.
+        """
+        formatted_string = f"Version Comparison for '{data.query}':\n\n{data.summary}\n\n"
+        if data.added:
+            formatted_string += "Added:\n"
+            for item in data.added:
+                formatted_string += f"- {item}\n"
+        if data.removed:
+            formatted_string += "\nRemoved:\n"
+            for item in data.removed:
+                formatted_string += f"- {item}\n"
+        if data.changed:
+            formatted_string += "\nChanged:\n"
+            for item in data.changed:
+                formatted_string += f"- {item}\n"
         return formatted_string
 
     def _format_results(self, data: AnalysisResult) -> str:

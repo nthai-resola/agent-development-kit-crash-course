@@ -77,3 +77,63 @@ The assistant will use the specialized agents to gather, verify, and summarize t
 ### Exiting the assistant
 
 To exit the assistant, type `exit`. Your session will be saved automatically.
+
+## Advanced Usage
+
+The Smart Research Assistant can handle a variety of complex queries by leveraging its specialized agents. Here are some examples of the types of queries you can use:
+
+### Verification Queries
+
+To verify a fact, include keywords like "verify" or "fact-check".
+
+```
+What would you like to research? Verify that the capital of Australia is Canberra.
+```
+
+### Summarization Queries
+
+To get a summary of a topic, use keywords like "summarize" or "give me a summary".
+
+```
+What would you like to research? Summarize the main points of the Paris Agreement on climate change.
+```
+
+### Comparison Queries
+
+To compare and contrast two or more things, use keywords like "compare", "vs", or "difference".
+
+```
+What would you like to research? Compare the features of Python and JavaScript for web development.
+```
+
+### Analysis Queries
+
+To perform data analysis, use the keyword "analyze".
+
+```
+What would you like to research? Analyze the trend of renewable energy production over the last decade.
+```
+
+### Translation Queries
+
+To translate text, use the keyword "translate".
+
+```
+What would youlike to research? Translate "hello world" to Spanish.
+```
+
+### Entity Extraction Queries
+
+To extract entities from a text, use the phrase "extract entities".
+
+```
+What would you like to research? Extract entities from the following text: "Apple Inc. is a technology company headquartered in Cupertino, California."
+```
+
+### Version Comparison Queries
+
+To compare two versions of a text, use the format `compare versions: [text1] vs [text2]`.
+
+```
+What would you like to research? compare versions: The first version of the text. vs The second version of the text, which is different.
+```

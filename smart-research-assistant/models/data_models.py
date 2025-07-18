@@ -81,20 +81,27 @@ class ComparativeAnalysisResult(BaseModel):
 
 class DataInsight(BaseModel):
     """Represents a single insight derived from data analysis."""
-    insight: str = Field(..., description="A description of the insight.")
-    supporting_data: str = Field(..., description="The data or evidence supporting the insight.")
-    confidence: float = Field(..., description="Confidence level in the insight's validity.")
+    insight: str = Field(..., description="A key insight derived from the data.")
+    supporting_data: str = Field(..., description="The specific data points or evidence supporting the insight.")
+    confidence: float = Field(..., description="The confidence level of the insight (0.0 to 1.0).")
 
 class AnalysisResult(BaseModel):
     """Represents the result of a data analysis query."""
     query: str = Field(..., description="The original analysis query.")
-    insights: List[DataInsight] = Field(..., description="List of insights derived from the data.")
-    analysis_summary: str = Field(..., description="A summary of the overall analysis.")
-    visualization: Optional[str] = Field(None, description="A path to a generated visualization file.")
+    analysis_summary: str = Field(..., description="A high-level summary of the analysis findings.")
+    insights: List[DataInsight] = Field(..., description="A list of detailed insights from the data.")
+    visualization: Optional[str] = Field(None, description="The path to a generated visualization, if applicable.")
+
+class VersionComparisonResult(BaseModel):
+    query: str = Field(..., description="The original comparison query.")
+    summary: str = Field(..., description="A summary of the differences between the two versions.")
+    added: List[str] = Field(..., description="A list of items added in the new version.")
+    removed: List[str] = Field(..., description="A list of items removed from the old version.")
+    changed: List[str] = Field(..., description="A list of items that have changed between versions.")
 
 class TranslationResult(BaseModel):
     """Represents the result of a translation query."""
-    original_text: str = Field(..., description="The original text.")
+    original_text: str = Field(..., description="The original text to be translated.")
     translated_text: str = Field(..., description="The translated text.")
     target_language: str = Field(..., description="The target language for translation.")
 
