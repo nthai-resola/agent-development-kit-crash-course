@@ -14,8 +14,10 @@ try:
     from .agents.search_agent import SearchAgent
     from .agents.verification_agent import VerificationAgent
     from .agents.summary_agent import SummaryAgent
+    from .agents.analysis_agent import AnalysisAgent
     from .agents.specialized_agent import SpecializedAgent
     from .storage.storage_provider import StorageProvider
+    from .session_manager import SessionManager
 except ImportError:
     from config import Config
     from models.data_models import ResearchSession
@@ -23,8 +25,10 @@ except ImportError:
     from agents.search_agent import SearchAgent
     from agents.verification_agent import VerificationAgent
     from agents.summary_agent import SummaryAgent
+    from agents.analysis_agent import AnalysisAgent
     from agents.specialized_agent import SpecializedAgent
     from storage.storage_provider import StorageProvider
+    from session_manager import SessionManager
 
 
 def setup_logging():
@@ -45,7 +49,6 @@ class SmartResearchAssistant:
     def __init__(self):
         """Initialize the Smart Research Assistant."""
         self.logger = logging.getLogger(__name__)
-        self.current_session: Optional[ResearchSession] = None
         
         # Validate configuration
         if not Config.validate_config():
@@ -53,6 +56,9 @@ class SmartResearchAssistant:
 
         # Initialize storage provider
         self.storage_provider = StorageProvider()
+        
+        # Initialize Session Manager
+        self.session_manager = SessionManager(storage_provider=self.storage_provider)
 
         # Initialize Orchestrator Agent
         self.orchestrator = OrchestratorAgent(storage_provider=self.storage_provider)
@@ -66,7 +72,7 @@ class SmartResearchAssistant:
         search_agent = SearchAgent(model=Config.SEARCH_MODEL)
         verification_agent = VerificationAgent(model=Config.VERIFICATION_MODEL)
         summary_agent = SummaryAgent(model=Config.SUMMARY_MODEL)
-        analysis_agent = SpecializedAgent(model=Config.ANALYSIS_MODEL, name="AnalysisAgent", agent_type="analysis")
+        analysis_agent = AnalysisAgent(model=Config.ANALYSIS_MODEL)
 
         # Register agents with the orchestrator
         self.orchestrator.register_agent(search_agent, "search")
@@ -84,9 +90,9 @@ class SmartResearchAssistant:
         Returns:
             The session ID
         """
-        self.current_session = ResearchSession(topic=topic)
-        self.logger.info(f"Started new research session: {self.current_session.session_id}")
-        return self.current_session.session_id
+        session = await self.session_manager.create_session(topic)
+        self.logger.info(f"Started new research session: {session.session_id}")
+        return session.session_id
     
     async def process_query(self, query: str) -> dict:
         """
@@ -98,13 +104,13 @@ class SmartResearchAssistant:
         Returns:
             Dictionary containing the query results
         """
-        if not self.current_session:
+        if not self.session_manager.current_session:
             await self.start_session()
         
         self.logger.info(f"Processing query: {query}")
         
         # Delegate query processing to the orchestrator
-        return await self.orchestrator.process_query(query, self.current_session.session_id)
+        return await self.orchestrator.process_query(query, self.session_manager.current_session.session_id)
     
     def get_session_info(self) -> Optional[dict]:
         """
@@ -113,17 +119,18 @@ class SmartResearchAssistant:
         Returns:
             Dictionary with session information or None if no active session
         """
-        if not self.current_session:
+        if not self.session_manager.current_session:
             return None
         
+        session = self.session_manager.current_session
         return {
-            "session_id": self.current_session.session_id,
-            "topic": self.current_session.topic,
-            "created_at": self.current_session.created_at.isoformat(),
-            "updated_at": self.current_session.updated_at.isoformat(),
-            "queries_count": len(self.current_session.queries),
-            "findings_count": len(self.current_session.findings),
-            "notes_count": len(self.current_session.notes)
+            "session_id": session.session_id,
+            "topic": session.topic,
+            "created_at": session.created_at.isoformat(),
+            "updated_at": session.updated_at.isoformat(),
+            "queries_count": len(session.queries),
+            "findings_count": len(session.findings),
+            "notes_count": len(session.notes)
         }
 
 

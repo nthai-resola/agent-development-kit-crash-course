@@ -81,6 +81,35 @@ class ComparativeAnalysisResult(BaseModel):
     analysis_summary: str = Field(..., description="A high-level summary of the comparative analysis.")
     comparison_points: List[ComparisonPoint] = Field(..., description="List of detailed comparison points.")
 
+class DataInsight(BaseModel):
+    """Represents a single insight derived from data analysis."""
+    insight: str = Field(..., description="A description of the insight.")
+    supporting_data: str = Field(..., description="The data or evidence supporting the insight.")
+    confidence: float = Field(..., description="Confidence level in the insight's validity.")
+
+class AnalysisResult(BaseModel):
+    """Represents the result of a data analysis query."""
+    query: str = Field(..., description="The original analysis query.")
+    insights: List[DataInsight] = Field(..., description="List of insights derived from the data.")
+    analysis_summary: str = Field(..., description="A summary of the overall analysis.")
+    visualization: Optional[str] = Field(None, description="A path to a generated visualization file.")
+
+class TranslationResult(BaseModel):
+    """Represents the result of a translation query."""
+    original_text: str = Field(..., description="The original text.")
+    translated_text: str = Field(..., description="The translated text.")
+    target_language: str = Field(..., description="The target language for translation.")
+
+class Entity(BaseModel):
+    """Represents a single extracted entity."""
+    text: str = Field(..., description="The text of the entity.")
+    type: str = Field(..., description="The type of the entity (e.g., 'PERSON', 'ORGANIZATION').")
+    relevance: float = Field(..., description="Relevance score of the entity.")
+
+class EntityExtractionResult(BaseModel):
+    """Represents the result of an entity extraction query."""
+    entities: List[Entity] = Field(..., description="List of extracted entities.")
+
 @dataclass
 class ResearchFinding:
     """Represents a key finding from research."""
