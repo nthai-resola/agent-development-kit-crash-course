@@ -14,9 +14,9 @@ from datetime import datetime
 # Import will be resolved at runtime when used as a package
 try:
     from .base_agent import BaseResearchAgent
-    from ..models.data_models import ResearchSession, ResearchQuery, QueryResult
-    from ..storage.storage_provider import StorageProvider
-    from ..config import Config
+    from models.data_models import ResearchFinding, UserNote, ResearchSession, ResearchQuery, QueryResult
+    from storage.storage_provider import StorageProvider
+    from config import Config
     from .specialized_agent import SpecializedAgent
 except ImportError:
     # For standalone testing
@@ -24,7 +24,7 @@ except ImportError:
     import os
     sys.path.append(os.path.dirname(os.path.dirname(__file__)))
     from agents.base_agent import BaseResearchAgent
-    from models.data_models import ResearchSession, ResearchQuery, QueryResult
+    from models.data_models import ResearchFinding, UserNote, ResearchSession, ResearchQuery, QueryResult
     from storage.storage_provider import StorageProvider
     from config import Config
     from agents.specialized_agent import SpecializedAgent
@@ -80,6 +80,7 @@ class OrchestratorAgent(BaseResearchAgent):
             "analysis": ["data_analysis", "visualization", "entity_extraction", "translation"]
         }
         
+        self._initialize_agent()
         logger.info(f"Orchestrator Agent initialized with model: {self.model}")
     
     def _initialize_agent(self):
@@ -101,11 +102,8 @@ class OrchestratorAgent(BaseResearchAgent):
             agent: The agent instance to register
             agent_type: The type of the agent (e.g., 'search', 'verification')
         """
-        if agent_type in self._agent_capabilities:
-            self.specialized_agents[agent_type] = agent
-            logger.info(f"Registered agent: {agent.name} for type: {agent_type}")
-        else:
-            logger.warning(f"Unknown agent type: {agent_type}. Not registering.")
+        self.specialized_agents[agent_type] = agent
+        logger.info(f"Registered agent: {agent.name} for type: {agent_type}")
     
     async def process_query(self, query: str, session_id: str = None) -> Dict[str, Any]:
         """
@@ -133,8 +131,7 @@ class OrchestratorAgent(BaseResearchAgent):
             # Create research query record
             research_query = ResearchQuery(
                 text=query,
-                agent=self.name,
-                timestamp=datetime.now()
+                agent=self.name
             )
             
             # Analyze query to determine required agents
@@ -203,13 +200,7 @@ class OrchestratorAgent(BaseResearchAgent):
             The session ID of the newly created session
         """
         try:
-            session_id = str(uuid4())
-            self.current_session = ResearchSession(
-                session_id=session_id,
-                topic=topic,
-                created_at=datetime.now(),
-                updated_at=datetime.now()
-            )
+            self.current_session = ResearchSession(topic=topic)
             
             # Initialize session context and state for the new session
             self._initialize_session_context(topic, metadata)
@@ -218,8 +209,8 @@ class OrchestratorAgent(BaseResearchAgent):
             if self.storage_provider:
                 await self.storage_provider.save_session(self.current_session)
             
-            logger.info(f"Created new research session: {session_id} with topic: {topic}")
-            return session_id
+            logger.info(f"Created new research session: {self.current_session.session_id} with topic: {topic}")
+            return self.current_session.session_id
             
         except Exception as e:
             logger.error(f"Error creating session: {str(e)}")
@@ -554,8 +545,6 @@ class OrchestratorAgent(BaseResearchAgent):
             Dictionary mapping agent types to their results
         """
         results = {}
-        retry_attempts = {}  # Track retry attempts for each agent
-        max_retries = 1  # Maximum number of retries per agent
         
         # Determine execution order based on dependencies
         # For example, search should generally come before verification
@@ -571,47 +560,19 @@ class OrchestratorAgent(BaseResearchAgent):
                     # Prepare enhanced context for the specialized agent
                     agent_context = self._prepare_agent_context(query, agent_type, results)
                     
-                    # Execute the specialized agent with timeout protection
-                    try:
-                        # In a real implementation, we would use asyncio.wait_for with a timeout
-                        # For now, we'll just call the process method directly
-                        result = await agent.process(query, agent_context)
-                        
-                        # Validate result structure
-                        if not isinstance(result, dict) or "success" not in result:
-                            logger.warning(f"{agent_type} agent returned invalid result structure")
-                            result = {
-                                "success": False,
-                                "error": f"Invalid result structure from {agent_type} agent",
-                                "content": str(result) if result else ""
-                            }
-                        
-                        # Store the result
-                        results[agent_type] = result
-                        
-                        # If the agent failed but we haven't reached max retries, try again with modified query
-                        if not result.get("success", False) and retry_attempts.get(agent_type, 0) < max_retries:
-                            retry_attempts[agent_type] = retry_attempts.get(agent_type, 0) + 1
-                            logger.info(f"Retrying {agent_type} agent with modified query (attempt {retry_attempts[agent_type]})")
-                            
-                            # Simplify or modify the query for retry
-                            modified_query = self._simplify_query_for_retry(query, agent_type)
-                            
-                            # Retry with modified query
-                            retry_result = await agent.process(modified_query, agent_context)
-                            
-                            # If retry succeeded, use that result instead
-                            if retry_result.get("success", False):
-                                results[agent_type] = retry_result
-                                logger.info(f"Retry for {agent_type} agent succeeded")
+                    # Execute the specialized agent
+                    result = await agent.process(query, agent_context)
                     
-                    except asyncio.TimeoutError:
-                        logger.error(f"{agent_type} agent timed out")
-                        results[agent_type] = {
+                    # Validate result structure
+                    if not isinstance(result, dict) or "success" not in result:
+                        logger.warning(f"{agent_type} agent returned invalid result structure")
+                        result = {
                             "success": False,
-                            "error": f"{agent_type} agent timed out",
-                            "content": ""
+                            "error": f"Invalid result structure from {agent_type} agent",
+                            "content": str(result) if result else ""
                         }
+                    
+                    results[agent_type] = result
                         
                 else:
                     logger.warning(f"Required agent not registered: {agent_type}")
@@ -621,12 +582,6 @@ class OrchestratorAgent(BaseResearchAgent):
                         "content": ""
                     }
                     
-                    # Try to use fallback if available
-                    fallback_result = await self._try_agent_fallback(query, agent_type)
-                    if fallback_result.get("success", False):
-                        results[agent_type] = fallback_result
-                        logger.info(f"Used fallback for {agent_type} agent")
-                    
             except Exception as e:
                 logger.error(f"Error executing {agent_type} agent: {str(e)}")
                 results[agent_type] = {
@@ -634,13 +589,6 @@ class OrchestratorAgent(BaseResearchAgent):
                     "error": str(e),
                     "content": ""
                 }
-                
-                # Record the exception for debugging
-                import traceback
-                logger.debug(f"Exception details for {agent_type} agent: {traceback.format_exc()}")
-        
-        # Check if we need to compensate for failed agents
-        await self._compensate_for_failed_agents(query, results, required_agents)
         
         return results
         
@@ -1042,18 +990,20 @@ class OrchestratorAgent(BaseResearchAgent):
         else:
             confidence_indicator = "(Low confidence)"
         
+        header = f"**Verification Results {confidence_indicator}:**"
+        
         if response_format == "brief":
-            return f"**Verification {confidence_indicator}:**\n{content}"
+            return f"{header}\n{content}"
         elif response_format == "bullet_points":
             # Convert to bullet points if not already
             if not content.strip().startswith("- ") and not content.strip().startswith("* "):
                 lines = content.strip().split("\n")
                 bullet_points = [f"- {line}" for line in lines if line.strip()]
-                return f"**Verification {confidence_indicator}:**\n" + "\n".join(bullet_points)
+                return f"{header}\n" + "\n".join(bullet_points)
             else:
-                return f"**Verification {confidence_indicator}:**\n" + content
+                return f"{header}\n" + content
         else:  # detailed
-            return f"**Verification {confidence_indicator}:**\n" + content
+            return f"{header}\n" + content
     
     def _format_summary_results(self, content: str, response_format: str) -> str:
         """Format summary results based on the response format."""
@@ -1372,28 +1322,27 @@ class OrchestratorAgent(BaseResearchAgent):
             title: Title of the finding
             content: Content of the finding
             sources: List of sources for the finding
-            categories: Optional categories for the finding
+            categories: Optional list of categories for the finding
             
         Returns:
-            True if finding was added successfully, False otherwise
+            True if successful, False otherwise
         """
+        if not self.current_session:
+            logger.warning("No active session to add a finding to")
+            return False
+            
         try:
-            if not self.current_session:
-                logger.warning("No current session to add finding to")
-                return False
-            
-            from ..models.data_models import ResearchFinding
-            
             finding = ResearchFinding(
                 title=title,
                 content=content,
                 sources=sources,
-                categories=categories or [],
-                timestamp=datetime.now()
+                categories=categories or []
             )
-            
             self.current_session.findings.append(finding)
-            self.current_session.update_timestamp()
+            
+            # Update session context
+            self.session_context["total_findings"] = len(self.current_session.findings)
+            self.session_context["key_findings"].append(title)
             
             # Update accumulated findings in session state
             self.session_state["accumulated_findings"].append({
@@ -1402,14 +1351,9 @@ class OrchestratorAgent(BaseResearchAgent):
                 "categories": categories or [],
                 "sources": sources
             })
-            
-            # Update session context
-            self.session_context["total_findings"] = len(self.current_session.findings)
-            self.session_context["key_findings"] = [f.title for f in self.current_session.findings[-3:]]
-            
-            # Save session if storage provider is available
-            if self.storage_provider:
-                await self.storage_provider.save_session(self.current_session)
+
+            self.current_session.update_timestamp()
+            await self.save_session()
             
             logger.info(f"Added finding '{title}' to session {self.current_session.session_id}")
             return True
@@ -1417,37 +1361,31 @@ class OrchestratorAgent(BaseResearchAgent):
         except Exception as e:
             logger.error(f"Error adding finding to session: {str(e)}")
             return False
-    
+            
     async def add_note_to_session(self, content: str, related_findings: List[str] = None) -> bool:
         """
         Add a user note to the current session.
         
         Args:
-            content: Content of the note
+            content: The content of the note
             related_findings: Optional list of related finding IDs
             
         Returns:
-            True if note was added successfully, False otherwise
+            True if successful, False otherwise
         """
+        if not self.current_session:
+            logger.warning("No active session to add a note to")
+            return False
+            
         try:
-            if not self.current_session:
-                logger.warning("No current session to add note to")
-                return False
-            
-            from ..models.data_models import UserNote
-            
             note = UserNote(
                 content=content,
-                related_findings=related_findings or [],
-                timestamp=datetime.now()
+                related_findings=related_findings or []
             )
-            
             self.current_session.notes.append(note)
-            self.current_session.update_timestamp()
             
-            # Save session if storage provider is available
-            if self.storage_provider:
-                await self.storage_provider.save_session(self.current_session)
+            self.current_session.update_timestamp()
+            await self.save_session()
             
             logger.info(f"Added note to session {self.current_session.session_id}")
             return True
@@ -1455,10 +1393,10 @@ class OrchestratorAgent(BaseResearchAgent):
         except Exception as e:
             logger.error(f"Error adding note to session: {str(e)}")
             return False
-    
+            
     def get_session_context(self) -> Dict[str, Any]:
         """
-        Get the current session context for continuity between interactions.
+        Get the context of the current session.
         
         Returns:
             Dictionary containing session context information

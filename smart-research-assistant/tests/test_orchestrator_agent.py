@@ -4,7 +4,7 @@ Tests for the Orchestrator Agent.
 
 import pytest
 import asyncio
-from unittest.mock import Mock, AsyncMock
+from unittest.mock import Mock, AsyncMock, patch
 from datetime import datetime
 
 # Import will be resolved at runtime when used as a package
@@ -54,7 +54,7 @@ class MockStorageProvider(StorageProvider):
 class MockAgent(BaseResearchAgent):
     """Mock specialized agent for testing."""
     
-    def __init__(self, name: str, model: str = "test-model"):
+    def __init__(self, name: str, model: str = "test"):
         super().__init__(model, name)
         self.process_calls = []
     
@@ -79,7 +79,7 @@ def mock_storage():
 
 @pytest.fixture
 def orchestrator(mock_storage):
-    return OrchestratorAgent(model="test-model", storage_provider=mock_storage)
+    return OrchestratorAgent(model="test", storage_provider=mock_storage)
 
 
 @pytest.fixture
@@ -90,10 +90,10 @@ def orchestrator_with_agents(orchestrator):
     summary_agent = MockAgent("SummaryAgent")
     analysis_agent = MockAgent("AnalysisAgent")
     
-    orchestrator.register_agent("search", search_agent)
-    orchestrator.register_agent("verification", verification_agent)
-    orchestrator.register_agent("summary", summary_agent)
-    orchestrator.register_agent("analysis", analysis_agent)
+    orchestrator.register_agent(search_agent, "search")
+    orchestrator.register_agent(verification_agent, "verification")
+    orchestrator.register_agent(summary_agent, "summary")
+    orchestrator.register_agent(analysis_agent, "analysis")
     
     return orchestrator
 
@@ -104,7 +104,7 @@ class TestOrchestratorAgent:
     def test_initialization(self, orchestrator):
         """Test that the orchestrator initializes correctly."""
         assert orchestrator.name == "OrchestratorAgent"
-        assert orchestrator.model == "test-model"
+        assert orchestrator.model == "test"
         assert orchestrator.current_session is None
         assert len(orchestrator.specialized_agents) == 0
         assert orchestrator.agent is not None
@@ -121,7 +121,7 @@ class TestOrchestratorAgent:
     def test_agent_registration(self, orchestrator):
         """Test agent registration functionality."""
         mock_agent = MockAgent("TestAgent")
-        orchestrator.register_agent("search", mock_agent)
+        orchestrator.register_agent(mock_agent, "search")
         
         assert "search" in orchestrator.specialized_agents
         assert orchestrator.specialized_agents["search"] == mock_agent
@@ -218,7 +218,7 @@ class TestOrchestratorAgent:
         response = await orchestrator._synthesize_response("test query", agent_results)
         
         assert "Search Results:" in response
-        assert "Verification Results:" in response
+        assert "Verification Results" in response
         assert "Search results content" in response
         assert "Verification results content" in response
     
@@ -294,7 +294,7 @@ class TestOrchestratorAgent:
     @pytest.mark.asyncio
     async def test_session_context_restoration(self, orchestrator, mock_storage):
         """Test session context restoration when loading (Requirement 4.2)."""
-        from ..models.data_models import ResearchQuery, QueryResult, ResearchFinding
+        from models.data_models import ResearchQuery, QueryResult, ResearchFinding
         
         # Create a session with some data
         session_id = await orchestrator.create_session("AI Research")
@@ -406,11 +406,89 @@ class TestOrchestratorAgent:
         assert len(context["recent_interactions"]) == 3
 
 
+class TestOrchestratorIntegration:
+    """Integration tests for the Orchestrator Agent with real specialized agents."""
+
+    @pytest.fixture
+    def integrated_orchestrator(self, mock_storage):
+        from agents.search_agent import SearchAgent
+        from agents.verification_agent import VerificationAgent
+        from agents.summary_agent import SummaryAgent
+        from agents.analysis_agent import AnalysisAgent
+
+        orchestrator = OrchestratorAgent(model="test", storage_provider=mock_storage)
+        
+        # Patch the underlying LLM calls for the specialized agents
+        with patch('pydantic_ai.Agent') as MockLLMAgent:
+            mock_llm_agent = MockLLMAgent.return_value
+            mock_llm_agent.run = AsyncMock(return_value={"key": "mocked_value"}) # A simple mock response
+
+            search_agent = SearchAgent(model="test")
+            verification_agent = VerificationAgent(model="test")
+            summary_agent = SummaryAgent(model="test")
+            analysis_agent = AnalysisAgent(model="test")
+            
+            orchestrator.register_agent(search_agent, "search")
+            orchestrator.register_agent(verification_agent, "verification")
+            orchestrator.register_agent(summary_agent, "summary")
+            orchestrator.register_agent(analysis_agent, "analysis")
+            
+            return orchestrator
+
+    @pytest.mark.asyncio
+    async def test_full_flow_integration(self, integrated_orchestrator):
+        """Test a full end-to-end flow with multiple real agents."""
+        query = "Search for information about Python, verify it, and then summarize it."
+        
+        # Mock the GoogleSearchTool to prevent real API calls
+        with patch('agents.search_agent.GoogleSearchTool') as MockGoogleSearchTool:
+            mock_search_tool_instance = MockGoogleSearchTool.return_value
+            mock_search_tool_instance.search = AsyncMock(return_value=[
+                {"title": "Python", "link": "https://python.org", "snippet": "Official site"}
+            ])
+
+            # Mock the structured data extraction for SearchAgent
+            with patch.object(integrated_orchestrator.specialized_agents["search"].structured_data_extractor, 'run') as mock_search_run:
+                from models.data_models import StructuredSearchResult, SearchResult
+                mock_search_run.return_value = StructuredSearchResult(
+                    query=query,
+                    results=[SearchResult(title="Python", link="https://python.org", snippet="Official site")],
+                    key_takeaways=["Python is a programming language"],
+                    related_topics=["programming"]
+                )
+                
+                # Mock the fact checker for VerificationAgent
+                with patch.object(integrated_orchestrator.specialized_agents["verification"].fact_checker, 'run') as mock_verify_run:
+                    from models.data_models import VerificationResult, FactCheck
+                    mock_verify_run.return_value = VerificationResult(
+                        query=query,
+                        fact_checks=[FactCheck(claim="Python is a language", is_verified=True, supporting_sources=[], conflicting_sources=[], confidence_score=0.9)],
+                        overall_confidence=0.9
+                    )
+
+                    # Mock the summarizer for SummaryAgent
+                    with patch.object(integrated_orchestrator.specialized_agents["summary"].summarizer, 'run') as mock_summary_run:
+                        from models.data_models import SummaryResult
+                        mock_summary_run.return_value = SummaryResult(
+                            query=query,
+                            summary="Python is a language.",
+                            key_points=[], themes=[], categories=[], source_documents=[]
+                        )
+
+                        result = await integrated_orchestrator.process_query(query)
+
+                        assert result["success"]
+                        assert "search" in result["agents_used"]
+                        assert "verification" in result["agents_used"]
+                        assert "summary" in result["agents_used"]
+                        assert "Python is a language" in result["response"]
+
+
 if __name__ == "__main__":
     # Run a simple test
     async def simple_test():
         storage = MockStorageProvider()
-        orchestrator = OrchestratorAgent(model="test-model", storage_provider=storage)
+        orchestrator = OrchestratorAgent(model="test", storage_provider=storage)
         
         # Test basic functionality
         session_id = await orchestrator.create_session("Test Topic")

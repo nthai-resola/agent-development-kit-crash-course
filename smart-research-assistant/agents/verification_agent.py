@@ -5,17 +5,9 @@ Verification Agent for the Smart Research Assistant.
 import logging
 from typing import Dict, Any, List
 from pydantic import ValidationError
-from pydantic_ai import pydantic_ai
-from ..models.data_models import VerificationResult
-
-try:
-    from .specialized_agent import SpecializedAgent
-except ImportError:
-    # For standalone testing
-    import sys
-    import os
-    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-    from agents.specialized_agent import SpecializedAgent
+from pydantic_ai import Agent
+from models.data_models import VerificationResult
+from agents.specialized_agent import SpecializedAgent
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +26,7 @@ class VerificationAgent(SpecializedAgent):
             name: The name of this agent.
         """
         super().__init__(model, name, agent_type="verification")
-        self.fact_checker = pydantic_ai.PydanticAI(model=self.model)
+        self.fact_checker = Agent(model=self.model)
 
     async def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """
@@ -58,7 +50,7 @@ class VerificationAgent(SpecializedAgent):
                 "success": True,
                 "content": self._format_results(verification_result),
                 "confidence": verification_result.overall_confidence,
-                "metadata": {"fact_checks": [fc.dict() for fc in verification_result.fact_checks]}
+                "metadata": {"fact_checks": [fc.model_dump() for fc in verification_result.fact_checks]}
             }
         except Exception as e:
             logger.error(f"Error during verification: {e}")

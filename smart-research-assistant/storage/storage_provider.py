@@ -5,15 +5,7 @@ Storage provider interface for the Smart Research Assistant.
 from abc import ABC, abstractmethod
 from typing import Dict, Any, List, Optional
 
-# Import will be resolved at runtime when used as a package
-try:
-    from ..models.data_models import ResearchSession
-except ImportError:
-    # For standalone testing
-    import sys
-    import os
-    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-    from models.data_models import ResearchSession
+from models.data_models import ResearchSession
 
 
 class StorageProvider(ABC):

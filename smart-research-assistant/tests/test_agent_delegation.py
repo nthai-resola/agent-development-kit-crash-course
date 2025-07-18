@@ -64,10 +64,10 @@ def orchestrator_with_agents(orchestrator):
     summary_agent = MockAgent("SummaryAgent")
     analysis_agent = MockAgent("AnalysisAgent")
     
-    orchestrator.register_agent("search", search_agent)
-    orchestrator.register_agent("verification", verification_agent)
-    orchestrator.register_agent("summary", summary_agent)
-    orchestrator.register_agent("analysis", analysis_agent)
+    orchestrator.register_agent(search_agent, "search")
+    orchestrator.register_agent(verification_agent, "verification")
+    orchestrator.register_agent(summary_agent, "summary")
+    orchestrator.register_agent(analysis_agent, "analysis")
     
     # Create a session for testing
     asyncio.run(orchestrator.create_session("Test Research"))
@@ -83,10 +83,10 @@ def orchestrator_with_failing_agents(orchestrator):
     summary_agent = MockAgent("SummaryAgent")
     analysis_agent = MockAgent("AnalysisAgent", should_fail=True)
     
-    orchestrator.register_agent("search", search_agent)
-    orchestrator.register_agent("verification", verification_agent)
-    orchestrator.register_agent("summary", summary_agent)
-    orchestrator.register_agent("analysis", analysis_agent)
+    orchestrator.register_agent(search_agent, "search")
+    orchestrator.register_agent(verification_agent, "verification")
+    orchestrator.register_agent(summary_agent, "summary")
+    orchestrator.register_agent(analysis_agent, "analysis")
     
     # Create a session for testing
     asyncio.run(orchestrator.create_session("Test Research"))
@@ -353,8 +353,8 @@ if __name__ == "__main__":
         # Register mock agents
         search_agent = MockAgent("SearchAgent")
         verification_agent = MockAgent("VerificationAgent")
-        orchestrator.register_agent("search", search_agent)
-        orchestrator.register_agent("verification", verification_agent)
+        orchestrator.register_agent(search_agent, "search")
+        orchestrator.register_agent(verification_agent, "verification")
         
         # Create a session
         await orchestrator.create_session("Test Research")

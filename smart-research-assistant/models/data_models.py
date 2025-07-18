@@ -9,26 +9,24 @@ from uuid import uuid4
 from pydantic import BaseModel, Field
 
 
-@dataclass
-class QueryResult:
+class QueryResult(BaseModel):
     """Represents a single result from a research query."""
-    result_id: str = field(default_factory=lambda: str(uuid4()))
+    result_id: str = Field(default_factory=lambda: str(uuid4()))
     source: str = ""
     content: str = ""
     confidence: float = 0.0
     verified: bool = False
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    timestamp: datetime = field(default_factory=datetime.now)
+    metadata: Dict[str, Any] = Field(default_factory=dict)
+    timestamp: datetime = Field(default_factory=datetime.now)
 
 
-@dataclass
-class ResearchQuery:
+class ResearchQuery(BaseModel):
     """Represents a research query made by the user."""
-    query_id: str = field(default_factory=lambda: str(uuid4()))
-    timestamp: datetime = field(default_factory=datetime.now)
+    query_id: str = Field(default_factory=lambda: str(uuid4()))
+    timestamp: datetime = Field(default_factory=datetime.now)
     text: str = ""
     agent: str = ""
-    results: List[QueryResult] = field(default_factory=list)
+    results: List[QueryResult] = Field(default_factory=list)
 
 
 class SearchResult(BaseModel):
@@ -108,38 +106,36 @@ class Entity(BaseModel):
 
 class EntityExtractionResult(BaseModel):
     """Represents the result of an entity extraction query."""
-    entities: List[Entity] = Field(..., description="List of extracted entities.")
+    entities: List[Entity] = Field(default_factory=list)
 
-@dataclass
-class ResearchFinding:
+
+class ResearchFinding(BaseModel):
     """Represents a key finding from research."""
-    finding_id: str = field(default_factory=lambda: str(uuid4()))
-    timestamp: datetime = field(default_factory=datetime.now)
+    finding_id: str = Field(default_factory=lambda: str(uuid4()))
+    timestamp: datetime = Field(default_factory=datetime.now)
     title: str = ""
     content: str = ""
-    sources: List[str] = field(default_factory=list)
-    categories: List[str] = field(default_factory=list)
+    sources: List[str] = Field(default_factory=list)
+    categories: List[str] = Field(default_factory=list)
 
 
-@dataclass
-class UserNote:
+class UserNote(BaseModel):
     """Represents a user-added note."""
-    note_id: str = field(default_factory=lambda: str(uuid4()))
-    timestamp: datetime = field(default_factory=datetime.now)
+    note_id: str = Field(default_factory=lambda: str(uuid4()))
+    timestamp: datetime = Field(default_factory=datetime.now)
     content: str = ""
-    related_findings: List[str] = field(default_factory=list)
+    related_findings: List[str] = Field(default_factory=list)
 
 
-@dataclass
-class ResearchSession:
+class ResearchSession(BaseModel):
     """Represents a complete research session."""
-    session_id: str = field(default_factory=lambda: str(uuid4()))
-    created_at: datetime = field(default_factory=datetime.now)
-    updated_at: datetime = field(default_factory=datetime.now)
+    session_id: str = Field(default_factory=lambda: str(uuid4()))
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
     topic: str = ""
-    queries: List[ResearchQuery] = field(default_factory=list)
-    findings: List[ResearchFinding] = field(default_factory=list)
-    notes: List[UserNote] = field(default_factory=list)
+    queries: List[ResearchQuery] = Field(default_factory=list)
+    findings: List[ResearchFinding] = Field(default_factory=list)
+    notes: List[UserNote] = Field(default_factory=list)
     
     def update_timestamp(self):
         """Update the last modified timestamp."""

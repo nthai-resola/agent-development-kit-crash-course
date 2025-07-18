@@ -6,29 +6,19 @@ import asyncio
 import logging
 from typing import Optional
 
-# Handle imports for both package and standalone usage
-try:
-    from .config import Config
-    from .models.data_models import ResearchSession
-    from .agents.orchestrator_agent import OrchestratorAgent
-    from .agents.search_agent import SearchAgent
-    from .agents.verification_agent import VerificationAgent
-    from .agents.summary_agent import SummaryAgent
-    from .agents.analysis_agent import AnalysisAgent
-    from .agents.specialized_agent import SpecializedAgent
-    from .storage.storage_provider import StorageProvider
-    from .session_manager import SessionManager
-except ImportError:
-    from config import Config
-    from models.data_models import ResearchSession
-    from agents.orchestrator_agent import OrchestratorAgent
-    from agents.search_agent import SearchAgent
-    from agents.verification_agent import VerificationAgent
-    from agents.summary_agent import SummaryAgent
-    from agents.analysis_agent import AnalysisAgent
-    from agents.specialized_agent import SpecializedAgent
-    from storage.storage_provider import StorageProvider
-    from session_manager import SessionManager
+from config import Config
+from models.data_models import ResearchSession
+from agents.orchestrator_agent import OrchestratorAgent
+from agents.search_agent import SearchAgent
+from agents.verification_agent import VerificationAgent
+from agents.summary_agent import SummaryAgent
+from agents.analysis_agent import AnalysisAgent
+from agents.specialized_agent import SpecializedAgent
+from storage.file_storage_provider import FileStorageProvider
+from session_manager import SessionManager
+from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import Prompt
 
 
 def setup_logging():
@@ -55,7 +45,7 @@ class SmartResearchAssistant:
             raise ValueError("Invalid configuration. Please check your environment variables.")
 
         # Initialize storage provider
-        self.storage_provider = StorageProvider()
+        self.storage_provider = FileStorageProvider(base_path=Config.STORAGE_PATH)
         
         # Initialize Session Manager
         self.session_manager = SessionManager(storage_provider=self.storage_provider)
@@ -134,27 +124,48 @@ class SmartResearchAssistant:
         }
 
 
-async def main():
-    """Main function for running the Smart Research Assistant."""
+async def main_cli():
+    """Main function for running the Smart Research Assistant CLI."""
     setup_logging()
     
     try:
         assistant = SmartResearchAssistant()
+        console = Console()
+        console.print(Panel("Welcome to the Smart Research Assistant!", title="[bold green]SRA[/bold green]"))
+
+        sessions = await assistant.session_manager.list_sessions()
+        if sessions:
+            console.print("Available sessions:")
+            for i, session in enumerate(sessions):
+                console.print(f"  {i+1}. {session['topic']} ({session['session_id']})")
+            
+            choice = Prompt.ask("Select a session to load (number) or press Enter for a new session", default="")
+            if choice.isdigit() and 0 < int(choice) <= len(sessions):
+                await assistant.session_manager.load_session(sessions[int(choice)-1]['session_id'])
+                console.print(f"Loaded session: {assistant.session_manager.current_session.topic}")
         
-        # Example usage
-        session_id = await assistant.start_session("AI Research")
-        print(f"Started session: {session_id}")
-        
-        result = await assistant.process_query("What are the latest developments in AI?")
-        print(f"Query result: {result}")
-        
-        session_info = assistant.get_session_info()
-        print(f"Session info: {session_info}")
-        
+        if not assistant.session_manager.current_session:
+            topic = Prompt.ask("Enter a topic for your new research session")
+            await assistant.start_session(topic)
+            console.print(f"Started new session: {topic}")
+            
+        while True:
+            query = Prompt.ask("\nWhat would you like to research? (type 'exit' to end)")
+            if query.lower() == 'exit':
+                break
+            
+            with console.status("[bold green]Researching...[/bold green]"):
+                result = await assistant.process_query(query)
+
+            if result["success"]:
+                console.print(Panel(result["response"], title="[bold blue]Research Results[/bold blue]"))
+            else:
+                console.print(Panel(f"An error occurred: {result.get('error', 'Unknown error')}", title="[bold red]Error[/bold red]"))
+    
     except Exception as e:
-        logging.error(f"Error running Smart Research Assistant: {e}")
-        raise
+        console.print(Panel(f"An unexpected error occurred: {e}", title="[bold red]Fatal Error[/bold red]"))
+        logging.error(f"Error running Smart Research Assistant: {e}", exc_info=True)
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(main_cli())

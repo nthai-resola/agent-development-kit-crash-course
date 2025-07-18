@@ -1,107 +1,79 @@
 # Smart Research Assistant
 
-An AI-powered research tool built on the Agent Development Kit that helps users conduct comprehensive research by combining web search, information extraction, fact-checking, and content summarization.
+The Smart Research Assistant is an advanced AI-powered application built on the Agent Development Kit (ADK) that helps users conduct comprehensive research by leveraging multiple specialized agents and tools. The system integrates web search capabilities, information extraction, fact verification, content summarization, and session management to provide a seamless research experience.
 
-## Project Structure
+## Features
 
-```
-smart-research-assistant/
-├── __init__.py                 # Package initialization
-├── .env.example               # Environment variables template
-├── config.py                  # Configuration management
-├── main.py                    # Main application entry point
-├── requirements.txt           # Python dependencies
-├── README.md                  # This file
-├── test_main.py              # Test script for main functionality
-├── verify_structure.py       # Structure verification script
-├── agents/                   # Agent implementations
-│   ├── __init__.py
-│   └── base_agent.py         # Base agent interface
-├── models/                   # Data models
-│   ├── __init__.py
-│   └── data_models.py        # Core data structures
-├── storage/                  # Storage providers
-│   ├── __init__.py
-│   └── storage_provider.py   # Storage interface
-├── tests/                    # Test files
-│   ├── __init__.py
-│   └── test_basic_structure.py
-└── tools/                    # Custom tools
-    └── __init__.py
-```
+- **Multi-Agent Architecture**: A central orchestrator agent coordinates specialized agents for search, verification, summarization, and analysis.
+- **Session Management**: Persistent research sessions allow you to pick up your work where you left off.
+- **Interactive CLI**: An easy-to-use command-line interface for interacting with the assistant.
+- **Extensible**: The modular design makes it easy to add new specialized agents and tools.
 
-## Core Components
+## Getting Started
 
-### Data Models
-- **ResearchSession**: Represents a complete research session
-- **ResearchQuery**: Represents individual queries within a session
-- **QueryResult**: Represents results from search operations
-- **ResearchFinding**: Represents key findings from research
-- **UserNote**: Represents user-added notes
+### Prerequisites
 
-### Base Classes
-- **BaseResearchAgent**: Abstract base class for all research agents
-- **StorageProvider**: Abstract interface for storage implementations
+- Python 3.9+
+- An `.env` file with your API keys. See `.env.example` for the required variables.
 
-### Configuration
-- **Config**: Centralized configuration management with environment variable support
+### Installation
 
-### Main Application
-- **SmartResearchAssistant**: Main application class that orchestrates the research workflow
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/your-repo/smart-research-assistant.git
+    cd smart-research-assistant
+    ```
+2.  Install the dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  Create a `.env` file and add your API keys.
 
-## Setup
+### Running the Assistant
 
-1. Copy the environment template:
-   ```bash
-   cp .env.example .env
-   ```
-
-2. Edit `.env` with your API keys:
-   ```
-   OPENAI_API_KEY=your_openai_api_key_here
-   GOOGLE_API_KEY=your_google_api_key_here
-   GOOGLE_CSE_ID=your_google_custom_search_engine_id_here
-   ```
-
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## Verification
-
-Run the structure verification script to ensure everything is set up correctly:
+To start the interactive CLI, run the following command:
 
 ```bash
-python3 verify_structure.py
+python main.py
 ```
 
-Run the main application test:
+## Architecture
 
-```bash
-python3 test_main.py
+The Smart Research Assistant follows a multi-agent architecture with a central orchestrator agent that coordinates specialized sub-agents.
+
+```mermaid
+graph TD
+    User[User] <--> CLI[CLI Interface]
+    CLI <--> Orchestrator[Orchestrator Agent]
+    Orchestrator <--> SearchAgent[Search Agent]
+    Orchestrator <--> VerificationAgent[Verification Agent]
+    Orchestrator <--> SummaryAgent[Summary Agent]
+    Orchestrator <--> AnalysisAgent[Analysis Agent]
+    SearchAgent <--> SearchTool[Google Search Tool]
+    Orchestrator <--> SessionManager[Session Manager]
+    SessionManager <--> Storage[(Persistent Storage)]
 ```
 
-## Next Steps
+## Usage Examples
 
-This completes the basic project structure and core components. The following tasks will implement:
+### Starting a new session
 
-1. Orchestrator Agent functionality
-2. Specialized agents (Search, Verification, Summary, Analysis)
-3. Session management
-4. Storage layer implementation
-5. User interface components
-6. Testing framework
-7. Documentation
+When you first run the assistant, you will be prompted to start a new session.
 
-## Requirements Addressed
+```
+Enter a topic for your new research session: AI in healthcare
+```
 
-This implementation addresses the following requirements:
-- **1.1**: Basic structure for information gathering
-- **2.1**: Foundation for information verification
-- **3.1**: Structure for content summarization
-- **4.1**: Session management framework
-- **5.1**: Tool integration foundation
-- **6.1**: User experience foundation
+### Asking a research question
 
-The project structure provides a solid foundation for implementing all the specialized agents and functionality outlined in the design document.
+Once you are in a session, you can ask research questions.
+
+```
+What would you like to research? What are the latest applications of AI in drug discovery?
+```
+
+The assistant will use the specialized agents to gather, verify, and summarize the information for you.
+
+### Exiting the assistant
+
+To exit the assistant, type `exit`. Your session will be saved automatically.

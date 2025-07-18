@@ -3,7 +3,7 @@ Specialized Agent for the Smart Research Assistant.
 """
 
 import logging
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 import asyncio
 
 try:
@@ -34,6 +34,7 @@ class SpecializedAgent(BaseResearchAgent):
         """
         super().__init__(model, name)
         self.agent_type = agent_type
+        self._initialize_agent()
 
     def _initialize_agent(self):
         """Initialize the pydantic-ai agent for the specialized agent."""

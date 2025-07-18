@@ -4,21 +4,11 @@ Search Agent for the Smart Research Assistant.
 
 import logging
 from typing import Dict, Any, List
-from pydantic import ValidationError
-from pydantic_ai import pydantic_ai
-from ..models.data_models import SearchResult, StructuredSearchResult
-
-try:
-    from .specialized_agent import SpecializedAgent
-    from ..tools.google_search import GoogleSearchTool
-except ImportError:
-    # For standalone testing
-    import sys
-    import os
-    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-    from agents.specialized_agent import SpecializedAgent
-    from tools.google_search import GoogleSearchTool
-    from models.data_models import SearchResult, StructuredSearchResult
+from pydantic import ValidationError, Field, field_validator
+from pydantic_ai import Agent
+from models.data_models import SearchResult, StructuredSearchResult
+from tools.google_search import GoogleSearchTool
+from agents.specialized_agent import SpecializedAgent
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +28,7 @@ class SearchAgent(SpecializedAgent):
         """
         super().__init__(model, name, agent_type="search")
         self.search_tool = GoogleSearchTool()
-        self.structured_data_extractor = pydantic_ai.PydanticAI(model=self.model)
+        self.structured_data_extractor = Agent(model=self.model)
 
     async def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """
@@ -64,14 +54,24 @@ class SearchAgent(SpecializedAgent):
             if not structured_data:
                 return {
                     "success": False,
-                    "content": "Failed to extract structured data from search results.",
-                    "confidence": 0.4,
+                    "content": "Could not extract structured data from search results.",
+                    "confidence": 0.1,
                     "metadata": {}
                 }
 
+            prioritized_results = self._prioritize_results(structured_data.results, context)
+
+            for result in prioritized_results:
+                is_paywalled, reason = self._detect_paywall(result)
+                if is_paywalled:
+                    result.is_paywalled = True
+                    result.paywall_reason = reason
+
+            formatted_results = self._format_results(structured_data)
+
             return {
                 "success": True,
-                "content": self._format_results(structured_data),
+                "content": formatted_results,
                 "confidence": 0.9,
                 "metadata": {"sources": [res.link for res in structured_data.results]}
             }
@@ -113,21 +113,21 @@ class SearchAgent(SpecializedAgent):
         if not preferred_sources:
             return results
 
-        prioritized = sorted(results, key=lambda r: any(pref in r.get('link', '') for pref in preferred_sources), reverse=True)
+        prioritized = sorted(results, key=lambda r: any(pref in r.link for pref in preferred_sources), reverse=True)
         return prioritized
 
-    def _detect_paywall(self, result: dict) -> (bool, str):
+    def _detect_paywall(self, result: SearchResult) -> (bool, str):
         """
         Detect if a search result is behind a paywall.
         This is a basic placeholder implementation.
         """
         paywall_keywords = ["subscribe", "premium", "for subscribers", "log in"]
-        snippet = result.get('snippet', '').lower()
+        snippet = result.snippet.lower()
         if any(keyword in snippet for keyword in paywall_keywords):
             return True, "Paywall detected based on snippet keywords."
 
         known_paywall_domains = ["wsj.com", "ft.com", "theathletic.com"]
-        if any(domain in result.get('link', '') for domain in known_paywall_domains):
+        if any(domain in result.link for domain in known_paywall_domains):
             return True, "Source is a known paywalled domain."
 
         return False, ""

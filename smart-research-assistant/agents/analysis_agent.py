@@ -3,20 +3,12 @@ Analysis Agent for the Smart Research Assistant.
 """
 
 import logging
-from typing import Dict, Any
-from pydantic import ValidationError
-from pydantic_ai import pydantic_ai
-from ..models.data_models import AnalysisResult, TranslationResult, EntityExtractionResult
+from typing import Dict, Any, List, Optional
+from pydantic import ValidationError, BaseModel, Field
+from pydantic_ai import Agent
+from models.data_models import AnalysisResult, TranslationResult, EntityExtractionResult, DataInsight
 import matplotlib.pyplot as plt
-
-try:
-    from .specialized_agent import SpecializedAgent
-except ImportError:
-    # For standalone testing
-    import sys
-    import os
-    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-    from agents.specialized_agent import SpecializedAgent
+from agents.specialized_agent import SpecializedAgent
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +27,7 @@ class AnalysisAgent(SpecializedAgent):
             name: The name of this agent.
         """
         super().__init__(model, name, agent_type="analysis")
-        self.analyzer = pydantic_ai.PydanticAI(model=self.model)
+        self.analyzer = Agent(model=self.model)
 
     async def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """
@@ -68,7 +60,7 @@ class AnalysisAgent(SpecializedAgent):
                 "success": True,
                 "content": self._format_results(analysis_result),
                 "confidence": 0.9,
-                "metadata": {"analysis": analysis_result.dict()}
+                "metadata": {"analysis": analysis_result.model_dump()}
             }
         except Exception as e:
             logger.error(f"Error during analysis: {e}")

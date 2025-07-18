@@ -5,17 +5,9 @@ Summary Agent for the Smart Research Assistant.
 import logging
 from typing import Dict, Any
 from pydantic import ValidationError
-from pydantic_ai import pydantic_ai
-from ..models.data_models import SummaryResult, ComparativeAnalysisResult
-
-try:
-    from .specialized_agent import SpecializedAgent
-except ImportError:
-    # For standalone testing
-    import sys
-    import os
-    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-    from agents.specialized_agent import SpecializedAgent
+from pydantic_ai import Agent
+from models.data_models import SummaryResult, ComparativeAnalysisResult
+from agents.specialized_agent import SpecializedAgent
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +26,7 @@ class SummaryAgent(SpecializedAgent):
             name: The name of this agent.
         """
         super().__init__(model, name, agent_type="summary")
-        self.summarizer = pydantic_ai.PydanticAI(model=self.model)
+        self.summarizer = Agent(model=self.model)
 
     async def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """
@@ -61,7 +53,7 @@ class SummaryAgent(SpecializedAgent):
                 "success": True,
                 "content": self._format_results(summary_result),
                 "confidence": 0.9,
-                "metadata": {"summary": summary_result.dict()}
+                "metadata": {"summary": summary_result.model_dump()}
             }
         except Exception as e:
             logger.error(f"Error during summarization: {e}")
@@ -96,7 +88,7 @@ class SummaryAgent(SpecializedAgent):
                 "success": True,
                 "content": self._format_comparison_results(analysis_result),
                 "confidence": 0.9,
-                "metadata": {"comparison": analysis_result.dict()}
+                "metadata": {"comparison": analysis_result.model_dump()}
             }
         except Exception as e:
             logger.error(f"Error during comparative analysis: {e}")

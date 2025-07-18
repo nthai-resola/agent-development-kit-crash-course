@@ -20,12 +20,6 @@ class BaseResearchAgent(ABC):
         self.model = model
         self.name = name
         self.agent: Optional[Any] = None
-        self._initialize_agent()
-    
-    @abstractmethod
-    def _initialize_agent(self):
-        """Initialize the pydantic-ai agent. Must be implemented by subclasses."""
-        pass
     
     @abstractmethod
     async def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
