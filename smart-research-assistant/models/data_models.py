@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
 from uuid import uuid4
+from pydantic import BaseModel, Field
 
 
 @dataclass
@@ -29,6 +30,22 @@ class ResearchQuery:
     agent: str = ""
     results: List[QueryResult] = field(default_factory=list)
 
+
+class SearchResult(BaseModel):
+    """Represents a single search result."""
+    title: str = Field(..., description="Title of the search result.")
+    link: str = Field(..., description="URL of the search result.")
+    snippet: str = Field(..., description="A brief summary of the search result.")
+    is_paywalled: bool = Field(False, description="Indicates if the content is behind a paywall.")
+    paywall_reason: Optional[str] = Field(None, description="Reason for paywall detection.")
+    relevance_score: float = Field(0.0, description="Score indicating relevance to the query.")
+
+class StructuredSearchResult(BaseModel):
+    """Represents a structured search result with metadata."""
+    query: str = Field(..., description="The original search query.")
+    results: List[SearchResult] = Field(..., description="List of individual search results.")
+    key_takeaways: List[str] = Field(..., description="Key insights or summaries from the results.")
+    related_topics: List[str] = Field(..., description="Related topics for further research.")
 
 @dataclass
 class ResearchFinding:

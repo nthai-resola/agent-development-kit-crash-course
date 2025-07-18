@@ -26,19 +26,19 @@
     - _Requirements: 1.1, 2.1, 3.1, 5.1_
 
 - [ ] 3. Implement the Search Agent
-  - [ ] 3.1 Create the Search Agent class
+  - [x] 3.1 Create the Search Agent class
     - Set up integration with Google Search tool
     - Implement basic search functionality
     - Create result extraction and formatting
     - _Requirements: 1.1, 1.2, 1.3_
 
-  - [ ] 3.2 Implement advanced search features
+  - [x] 3.2 Implement advanced search features
     - Add source prioritization logic
     - Implement handling for paywalled content
     - Create focused search for subtopics
     - _Requirements: 1.3, 1.4, 1.5_
 
-  - [ ] 3.3 Create search result processing
+  - [x] 3.3 Create search result processing
     - Implement extraction of key information from results
     - Add metadata extraction for sources
     - Create structured output format for search results
