@@ -17,6 +17,7 @@ try:
     from ..models.data_models import ResearchSession, ResearchQuery, QueryResult
     from ..storage.storage_provider import StorageProvider
     from ..config import Config
+    from .specialized_agent import SpecializedAgent
 except ImportError:
     # For standalone testing
     import sys
@@ -26,6 +27,7 @@ except ImportError:
     from models.data_models import ResearchSession, ResearchQuery, QueryResult
     from storage.storage_provider import StorageProvider
     from config import Config
+    from agents.specialized_agent import SpecializedAgent
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -90,6 +92,20 @@ class OrchestratorAgent(BaseResearchAgent):
             "initialized": True
         }
         logger.debug("Orchestrator agent initialized")
+
+    def register_agent(self, agent: BaseResearchAgent, agent_type: str):
+        """
+        Register a specialized agent with the orchestrator.
+        
+        Args:
+            agent: The agent instance to register
+            agent_type: The type of the agent (e.g., 'search', 'verification')
+        """
+        if agent_type in self._agent_capabilities:
+            self.specialized_agents[agent_type] = agent
+            logger.info(f"Registered agent: {agent.name} for type: {agent_type}")
+        else:
+            logger.warning(f"Unknown agent type: {agent_type}. Not registering.")
     
     async def process_query(self, query: str, session_id: str = None) -> Dict[str, Any]:
         """
@@ -404,20 +420,6 @@ class OrchestratorAgent(BaseResearchAgent):
         except Exception as e:
             logger.error(f"Error switching to session {session_id}: {str(e)}")
             return False
-    
-    def register_agent(self, agent_type: str, agent: BaseResearchAgent):
-        """
-        Register a specialized agent with the orchestrator.
-        
-        Args:
-            agent_type: The type of agent (search, verification, summary, analysis)
-            agent: The agent instance to register
-        """
-        if agent_type not in self._agent_capabilities:
-            logger.warning(f"Unknown agent type: {agent_type}")
-        
-        self.specialized_agents[agent_type] = agent
-        logger.info(f"Registered {agent_type} agent: {agent.name}")
     
     def get_registered_agents(self) -> Dict[str, str]:
         """

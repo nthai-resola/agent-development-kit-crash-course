@@ -10,9 +10,15 @@ from typing import Optional
 try:
     from .config import Config
     from .models.data_models import ResearchSession
+    from .agents.orchestrator_agent import OrchestratorAgent
+    from .agents.specialized_agent import SpecializedAgent
+    from .storage.storage_provider import StorageProvider
 except ImportError:
     from config import Config
     from models.data_models import ResearchSession
+    from agents.orchestrator_agent import OrchestratorAgent
+    from agents.specialized_agent import SpecializedAgent
+    from storage.storage_provider import StorageProvider
 
 
 def setup_logging():
@@ -38,8 +44,29 @@ class SmartResearchAssistant:
         # Validate configuration
         if not Config.validate_config():
             raise ValueError("Invalid configuration. Please check your environment variables.")
+
+        # Initialize storage provider
+        self.storage_provider = StorageProvider()
+
+        # Initialize Orchestrator Agent
+        self.orchestrator = OrchestratorAgent(storage_provider=self.storage_provider)
+        self._register_specialized_agents()
         
         self.logger.info("Smart Research Assistant initialized")
+
+    def _register_specialized_agents(self):
+        """Register specialized agents with the orchestrator."""
+        # Create specialized agents
+        search_agent = SpecializedAgent(model=Config.SEARCH_MODEL, name="SearchAgent", agent_type="search")
+        verification_agent = SpecializedAgent(model=Config.VERIFICATION_MODEL, name="VerificationAgent", agent_type="verification")
+        summary_agent = SpecializedAgent(model=Config.SUMMARY_MODEL, name="SummaryAgent", agent_type="summary")
+        analysis_agent = SpecializedAgent(model=Config.ANALYSIS_MODEL, name="AnalysisAgent", agent_type="analysis")
+
+        # Register agents with the orchestrator
+        self.orchestrator.register_agent(search_agent, "search")
+        self.orchestrator.register_agent(verification_agent, "verification")
+        self.orchestrator.register_agent(summary_agent, "summary")
+        self.orchestrator.register_agent(analysis_agent, "analysis")
     
     async def start_session(self, topic: str = "") -> str:
         """
@@ -70,14 +97,8 @@ class SmartResearchAssistant:
         
         self.logger.info(f"Processing query: {query}")
         
-        # This will be implemented in later tasks
-        # For now, return a placeholder response
-        return {
-            "query": query,
-            "session_id": self.current_session.session_id,
-            "status": "received",
-            "message": "Query processing will be implemented in subsequent tasks"
-        }
+        # Delegate query processing to the orchestrator
+        return await self.orchestrator.process_query(query, self.current_session.session_id)
     
     def get_session_info(self) -> Optional[dict]:
         """
