@@ -108,6 +108,15 @@ class TestOrchestratorAgent:
         assert orchestrator.current_session is None
         assert len(orchestrator.specialized_agents) == 0
         assert orchestrator.agent is not None
+        
+        # Test enhanced session management initialization
+        assert orchestrator.session_context == {}
+        assert orchestrator.interaction_history == []
+        assert "active_topics" in orchestrator.session_state
+        assert "research_focus" in orchestrator.session_state
+        assert "last_query_type" in orchestrator.session_state
+        assert "accumulated_findings" in orchestrator.session_state
+        assert "user_preferences" in orchestrator.session_state
     
     def test_agent_registration(self, orchestrator):
         """Test agent registration functionality."""
@@ -257,6 +266,144 @@ class TestOrchestratorAgent:
         assert info["topic"] == "Test Topic"
         assert "created_at" in info
         assert "updated_at" in info
+    
+    @pytest.mark.asyncio
+    async def test_context_tracking_between_interactions(self, orchestrator_with_agents):
+        """Test context tracking between interactions (Requirement 4.3)."""
+        # Process first query
+        result1 = await orchestrator_with_agents.process_query("search for AI information")
+        
+        assert result1["success"] is True
+        assert len(orchestrator_with_agents.interaction_history) == 1
+        assert orchestrator_with_agents.session_state["last_query_type"] == "search"
+        
+        # Process second query
+        result2 = await orchestrator_with_agents.process_query("verify the AI facts")
+        
+        assert result2["success"] is True
+        assert len(orchestrator_with_agents.interaction_history) == 2
+        assert orchestrator_with_agents.session_state["last_query_type"] == "verification"
+        
+        # Check interaction history
+        interactions = orchestrator_with_agents.interaction_history
+        assert interactions[0]["query"] == "search for AI information"
+        assert interactions[1]["query"] == "verify the AI facts"
+        assert interactions[0]["success"] is True
+        assert interactions[1]["success"] is True
+    
+    @pytest.mark.asyncio
+    async def test_session_context_restoration(self, orchestrator, mock_storage):
+        """Test session context restoration when loading (Requirement 4.2)."""
+        from ..models.data_models import ResearchQuery, QueryResult, ResearchFinding
+        
+        # Create a session with some data
+        session_id = await orchestrator.create_session("AI Research")
+        
+        # Add some queries and findings to simulate a session with history
+        query = ResearchQuery(text="What is machine learning?", agent="OrchestratorAgent")
+        query.results.append(QueryResult(source="search", content="ML is a subset of AI...", confidence=0.9))
+        orchestrator.current_session.queries.append(query)
+        
+        finding = ResearchFinding(
+            title="Key ML Concepts",
+            content="Machine learning involves algorithms...",
+            sources=["source1.com"],
+            categories=["AI", "Technology"]
+        )
+        orchestrator.current_session.findings.append(finding)
+        
+        # Save the session
+        await orchestrator.save_session()
+        
+        # Clear current session and context
+        orchestrator.current_session = None
+        orchestrator.session_context.clear()
+        orchestrator.interaction_history.clear()
+        
+        # Load the session
+        success = await orchestrator.load_session(session_id)
+        
+        assert success is True
+        assert orchestrator.current_session is not None
+        
+        # Verify context restoration
+        assert len(orchestrator.interaction_history) == 1
+        assert orchestrator.session_state["research_focus"] == "AI Research"
+        assert len(orchestrator.session_state["accumulated_findings"]) == 1
+        assert orchestrator.session_context["session_id"] == session_id
+        assert orchestrator.session_context["topic"] == "AI Research"
+    
+    @pytest.mark.asyncio
+    async def test_add_finding_to_session(self, orchestrator):
+        """Test adding findings to session (Requirement 4.3)."""
+        # Create a session first
+        await orchestrator.create_session("Test Research")
+        
+        # Add a finding
+        success = await orchestrator.add_finding_to_session(
+            title="Important Discovery",
+            content="This is a significant finding about AI research...",
+            sources=["source1.com", "source2.com"],
+            categories=["AI", "Research"]
+        )
+        
+        assert success is True
+        assert len(orchestrator.current_session.findings) == 1
+        assert orchestrator.current_session.findings[0].title == "Important Discovery"
+        assert len(orchestrator.session_state["accumulated_findings"]) == 1
+    
+    @pytest.mark.asyncio
+    async def test_add_note_to_session(self, orchestrator):
+        """Test adding notes to session (Requirement 4.3)."""
+        # Create a session first
+        await orchestrator.create_session("Test Research")
+        
+        # Add a note
+        success = await orchestrator.add_note_to_session(
+            content="Remember to investigate this further",
+            related_findings=["finding-123"]
+        )
+        
+        assert success is True
+        assert len(orchestrator.current_session.notes) == 1
+        assert orchestrator.current_session.notes[0].content == "Remember to investigate this further"
+    
+    def test_get_session_context(self, orchestrator):
+        """Test getting session context for continuity."""
+        # Test with no session
+        context = orchestrator.get_session_context()
+        assert context["has_active_session"] is False
+        assert context["session_context"] == {}
+        
+        # Create a session and test again
+        orchestrator.current_session = ResearchSession(session_id="test", topic="Test")
+        orchestrator.session_context = {"test": "data"}
+        orchestrator.session_state = {"active_topics": ["AI"]}
+        
+        context = orchestrator.get_session_context()
+        assert context["has_active_session"] is True
+        assert context["session_context"]["test"] == "data"
+        assert context["session_state"]["active_topics"] == ["AI"]
+    
+    @pytest.mark.asyncio
+    async def test_session_state_management(self, orchestrator_with_agents):
+        """Test comprehensive session state management."""
+        # Process queries of different types
+        await orchestrator_with_agents.process_query("Search for Machine Learning information")
+        await orchestrator_with_agents.process_query("Summarize the key points about AI")
+        await orchestrator_with_agents.process_query("Analyze the data trends")
+        
+        # Check session state updates
+        state = orchestrator_with_agents.session_state
+        assert state["last_query_type"] == "analysis"
+        assert len(state["active_topics"]) > 0
+        
+        # Check interaction history
+        assert len(orchestrator_with_agents.interaction_history) == 3
+        
+        # Verify context continuity
+        context = orchestrator_with_agents.get_session_context()
+        assert len(context["recent_interactions"]) == 3
 
 
 if __name__ == "__main__":
