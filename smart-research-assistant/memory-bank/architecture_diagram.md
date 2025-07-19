@@ -1,0 +1,10 @@
+graph TD
+    User[User] <--> CLI[CLI Interface]
+    CLI <--> Orchestrator[Orchestrator Agent]
+    Orchestrator <--> SearchAgent[Search Agent]
+    Orchestrator <--> VerificationAgent[Verification Agent]
+    Orchestrator <--> SummaryAgent[Summary Agent]
+    Orchestrator <--> AnalysisAgent[Analysis Agent]
+    SearchAgent <--> SearchTool[Google Search Tool]
+    Orchestrator <--> SessionManager[Session Manager]
+    SessionManager <--> Storage[(Persistent Storage)] 

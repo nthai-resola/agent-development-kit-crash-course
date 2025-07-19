@@ -127,10 +127,10 @@ class SmartResearchAssistant:
 async def main_cli():
     """Main function for running the Smart Research Assistant CLI."""
     setup_logging()
+    console = Console()
     
     try:
         assistant = SmartResearchAssistant()
-        console = Console()
         console.print(Panel("Welcome to the Smart Research Assistant!", title="[bold green]SRA[/bold green]"))
 
         sessions = await assistant.session_manager.list_sessions()

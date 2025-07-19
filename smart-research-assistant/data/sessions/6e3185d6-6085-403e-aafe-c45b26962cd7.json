@@ -1,0 +1,17 @@
+{
+  "session_id": "6e3185d6-6085-403e-aafe-c45b26962cd7",
+  "created_at": "2025-07-20T06:34:48.790459",
+  "updated_at": "2025-07-20T06:34:59.898644",
+  "topic": "pydantic AI",
+  "queries": [
+    {
+      "query_id": "681d59bf-6e47-4668-8ef0-7b51ca00c116",
+      "timestamp": "2025-07-20T06:34:59.427040",
+      "text": "pydantic AI",
+      "agent": "OrchestratorAgent",
+      "results": []
+    }
+  ],
+  "findings": [],
+  "notes": []
+}

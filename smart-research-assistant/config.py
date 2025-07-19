@@ -14,7 +14,7 @@ class Config:
     """Configuration class for the Smart Research Assistant."""
     
     # Default model configurations
-    DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", "gpt-4")
+    DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", "openai:gpt-4")
     ORCHESTRATOR_MODEL = os.getenv("ORCHESTRATOR_MODEL", DEFAULT_MODEL)
     SEARCH_MODEL = os.getenv("SEARCH_MODEL", DEFAULT_MODEL)
     VERIFICATION_MODEL = os.getenv("VERIFICATION_MODEL", DEFAULT_MODEL)

@@ -1,0 +1,195 @@
+2025-07-19 17:27:38,727 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: gpt-4
+2025-07-19 17:27:38,736 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-07-19 17:28:37,159 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: gpt-4
+2025-07-19 17:28:37,169 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-07-19 17:28:37,178 - root - ERROR - Error running Smart Research Assistant: Unknown model: gpt-4
+Traceback (most recent call last):
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 133, in main_cli
+    assistant = SmartResearchAssistant()
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 55, in __init__
+    self._register_specialized_agents()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 62, in _register_specialized_agents
+    search_agent = SearchAgent(model=Config.SEARCH_MODEL)
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/agents/search_agent.py", line 31, in __init__
+    self.structured_data_extractor = Agent(model=self.model)
+                                     ~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pydantic_ai/agent.py", line 159, in __init__
+    self.model = models.infer_model(model)
+                 ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pydantic_ai/models/__init__.py", line 303, in infer_model
+    raise UserError(f'Unknown model: {model}')
+pydantic_ai.exceptions.UserError: Unknown model: gpt-4
+2025-07-19 17:29:22,521 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: gpt-4
+2025-07-19 17:29:22,526 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-07-19 17:29:22,541 - root - ERROR - Error running Smart Research Assistant: Unknown model: gpt-4
+Traceback (most recent call last):
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 133, in main_cli
+    assistant = SmartResearchAssistant()
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 55, in __init__
+    self._register_specialized_agents()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 62, in _register_specialized_agents
+    search_agent = SearchAgent(model=Config.SEARCH_MODEL)
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/agents/search_agent.py", line 31, in __init__
+    self.structured_data_extractor = Agent(model=self.model)
+                                     ~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pydantic_ai/agent.py", line 159, in __init__
+    self.model = models.infer_model(model)
+                 ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pydantic_ai/models/__init__.py", line 303, in infer_model
+    raise UserError(f'Unknown model: {model}')
+pydantic_ai.exceptions.UserError: Unknown model: gpt-4
+2025-07-19 17:29:49,789 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: gpt-4
+2025-07-19 17:29:49,796 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-07-19 17:29:49,810 - root - ERROR - Error running Smart Research Assistant: Unknown model: gpt-4
+Traceback (most recent call last):
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 133, in main_cli
+    assistant = SmartResearchAssistant()
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 55, in __init__
+    self._register_specialized_agents()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 62, in _register_specialized_agents
+    search_agent = SearchAgent(model=Config.SEARCH_MODEL)
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/agents/search_agent.py", line 31, in __init__
+    self.structured_data_extractor = Agent(model=self.model)
+                                     ~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pydantic_ai/agent.py", line 159, in __init__
+    self.model = models.infer_model(model)
+                 ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pydantic_ai/models/__init__.py", line 303, in infer_model
+    raise UserError(f'Unknown model: {model}')
+pydantic_ai.exceptions.UserError: Unknown model: gpt-4
+2025-07-19 17:30:20,977 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: gpt-4
+2025-07-19 17:30:20,985 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-07-19 17:30:21,007 - root - ERROR - Error running Smart Research Assistant: Unknown model: gpt-4
+Traceback (most recent call last):
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 133, in main_cli
+    assistant = SmartResearchAssistant()
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 55, in __init__
+    self._register_specialized_agents()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 62, in _register_specialized_agents
+    search_agent = SearchAgent(model=Config.SEARCH_MODEL)
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/agents/search_agent.py", line 31, in __init__
+    self.structured_data_extractor = Agent(model=self.model)
+                                     ~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pydantic_ai/agent.py", line 159, in __init__
+    self.model = models.infer_model(model)
+                 ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pydantic_ai/models/__init__.py", line 303, in infer_model
+    raise UserError(f'Unknown model: {model}')
+pydantic_ai.exceptions.UserError: Unknown model: gpt-4
+2025-07-19 17:55:44,156 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: gpt-4
+2025-07-19 17:55:44,159 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-07-19 17:55:44,162 - root - ERROR - Error running Smart Research Assistant: Unknown model: gpt-4
+Traceback (most recent call last):
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 133, in main_cli
+    assistant = SmartResearchAssistant()
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 55, in __init__
+    self._register_specialized_agents()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 62, in _register_specialized_agents
+    search_agent = SearchAgent(model=Config.SEARCH_MODEL)
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/agents/search_agent.py", line 31, in __init__
+    self.structured_data_extractor = Agent(model=self.model)
+                                     ~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pydantic_ai/agent.py", line 159, in __init__
+    self.model = models.infer_model(model)
+                 ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pydantic_ai/models/__init__.py", line 303, in infer_model
+    raise UserError(f'Unknown model: {model}')
+pydantic_ai.exceptions.UserError: Unknown model: gpt-4
+2025-07-19 17:56:05,327 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: gpt-4
+2025-07-19 17:56:05,328 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-07-19 17:56:05,330 - root - ERROR - Error running Smart Research Assistant: Unknown model: gpt-4
+Traceback (most recent call last):
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 134, in main_cli
+    assistant = SmartResearchAssistant()
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 55, in __init__
+    self._register_specialized_agents()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/main.py", line 63, in _register_specialized_agents
+    search_agent = SearchAgent(model=Config.SEARCH_MODEL)
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/agents/search_agent.py", line 31, in __init__
+    self.structured_data_extractor = Agent(model=self.model)
+                                     ~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pydantic_ai/agent.py", line 159, in __init__
+    self.model = models.infer_model(model)
+                 ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pydantic_ai/models/__init__.py", line 303, in infer_model
+    raise UserError(f'Unknown model: {model}')
+pydantic_ai.exceptions.UserError: Unknown model: gpt-4
+2025-07-19 17:56:38,982 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-19 17:56:38,984 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-07-19 17:56:39,852 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-19 17:56:39,852 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-19 17:56:39,852 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-19 17:56:39,852 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-19 17:56:39,852 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-20 06:03:09,325 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-20 06:03:09,326 - session_manager - INFO - Created new session: 066bc1e7-374f-4a15-9faf-4d6f020009b1
+2025-07-20 06:03:09,326 - __main__ - INFO - Started new research session: 066bc1e7-374f-4a15-9faf-4d6f020009b1
+2025-07-20 06:03:23,195 - __main__ - INFO - Processing query: yes
+2025-07-20 06:03:23,195 - agents.orchestrator_agent - INFO - Processing query: yes...
+2025-07-20 06:03:23,197 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-20 06:03:23,198 - agents.orchestrator_agent - INFO - Restored context for session 066bc1e7-374f-4a15-9faf-4d6f020009b1: 0 interactions, 0 findings
+2025-07-20 06:03:23,198 - agents.orchestrator_agent - INFO - Loaded research session: 066bc1e7-374f-4a15-9faf-4d6f020009b1
+2025-07-20 06:03:23,199 - agents.search_agent - INFO - SearchAgent processing query: yes...
+2025-07-20 06:03:23,199 - tools.google_search - INFO - Performing Google search for: yes...
+2025-07-20 06:03:23,525 - googleapiclient.http - WARNING - Encountered 403 Forbidden with reason "accessNotConfigured"
+2025-07-20 06:03:23,525 - tools.google_search - ERROR - An HTTP error occurred during Google search: <HttpError 403 when requesting https://customsearch.googleapis.com/customsearch/v1?q=yes&cx=YOUR_GOOGLE_CSE_ID&num=20&key=AIzaSyCsZ_yfKZcbGPt62AKLldu5Hq-pu5HgoLM&alt=json returned "Custom Search API has not been used in project 23266209141 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/customsearch.googleapis.com/overview?project=23266209141 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.". Details: "[{'message': 'Custom Search API has not been used in project 23266209141 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/customsearch.googleapis.com/overview?project=23266209141 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.', 'domain': 'usageLimits', 'reason': 'accessNotConfigured', 'extendedHelp': 'https://console.developers.google.com'}]">
+2025-07-20 06:03:23,526 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-20 06:13:55,798 - __main__ - INFO - Processing query: continue
+2025-07-20 06:13:55,801 - agents.orchestrator_agent - INFO - Processing query: continue...
+2025-07-20 06:13:55,805 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-20 06:13:55,806 - agents.orchestrator_agent - INFO - Restored context for session 066bc1e7-374f-4a15-9faf-4d6f020009b1: 1 interactions, 0 findings
+2025-07-20 06:13:55,806 - agents.orchestrator_agent - INFO - Loaded research session: 066bc1e7-374f-4a15-9faf-4d6f020009b1
+2025-07-20 06:13:55,807 - agents.search_agent - INFO - SearchAgent processing query: continue...
+2025-07-20 06:13:55,807 - tools.google_search - INFO - Performing Google search for: continue...
+2025-07-20 06:13:56,158 - googleapiclient.http - WARNING - Encountered 403 Forbidden with reason "accessNotConfigured"
+2025-07-20 06:13:56,158 - tools.google_search - ERROR - An HTTP error occurred during Google search: <HttpError 403 when requesting https://customsearch.googleapis.com/customsearch/v1?q=continue&cx=YOUR_GOOGLE_CSE_ID&num=20&key=AIzaSyCsZ_yfKZcbGPt62AKLldu5Hq-pu5HgoLM&alt=json returned "Custom Search API has not been used in project 23266209141 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/customsearch.googleapis.com/overview?project=23266209141 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.". Details: "[{'message': 'Custom Search API has not been used in project 23266209141 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/customsearch.googleapis.com/overview?project=23266209141 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.', 'domain': 'usageLimits', 'reason': 'accessNotConfigured', 'extendedHelp': 'https://console.developers.google.com'}]">
+2025-07-20 06:13:56,160 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-20 06:23:19,161 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-20 06:23:19,163 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-07-20 06:23:20,071 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-20 06:23:20,071 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-20 06:23:20,071 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-20 06:23:20,071 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-20 06:23:20,071 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-20 06:23:20,074 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-20 06:23:37,653 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-20 06:23:37,653 - session_manager - INFO - Created new session: bc9efe37-8906-4fe1-b2e4-681562530867
+2025-07-20 06:23:37,653 - __main__ - INFO - Started new research session: bc9efe37-8906-4fe1-b2e4-681562530867
+2025-07-20 06:23:52,597 - __main__ - INFO - Processing query: pydantic AI
+2025-07-20 06:23:52,597 - agents.orchestrator_agent - INFO - Processing query: pydantic AI...
+2025-07-20 06:23:52,598 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-20 06:23:52,598 - agents.orchestrator_agent - INFO - Restored context for session bc9efe37-8906-4fe1-b2e4-681562530867: 0 interactions, 0 findings
+2025-07-20 06:23:52,599 - agents.orchestrator_agent - INFO - Loaded research session: bc9efe37-8906-4fe1-b2e4-681562530867
+2025-07-20 06:23:52,599 - agents.search_agent - INFO - SearchAgent processing query: pydantic AI...
+2025-07-20 06:23:52,599 - tools.google_search - INFO - Performing Google search for: pydantic AI...
+2025-07-20 06:23:52,953 - googleapiclient.http - WARNING - Encountered 403 Forbidden with reason "forbidden"
+2025-07-20 06:23:52,953 - tools.google_search - ERROR - An HTTP error occurred during Google search: <HttpError 403 when requesting https://customsearch.googleapis.com/customsearch/v1?q=pydantic+AI&cx=f3970a50211a34e48&num=20&key=AIzaSyCsZ_yfKZcbGPt62AKLldu5Hq-pu5HgoLM&alt=json returned "Requests to this API customsearch method google.customsearch.v1.CustomSearchService.List are blocked.". Details: "[{'message': 'Requests to this API customsearch method google.customsearch.v1.CustomSearchService.List are blocked.', 'domain': 'global', 'reason': 'forbidden'}]">
+2025-07-20 06:23:52,954 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-20 06:33:43,359 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-20 06:33:43,361 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-07-20 06:33:44,476 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-20 06:33:44,476 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-20 06:33:44,476 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-20 06:33:44,476 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-20 06:33:44,476 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-20 06:33:44,480 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-20 06:33:44,481 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-20 06:34:48,797 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-20 06:34:48,797 - session_manager - INFO - Created new session: 6e3185d6-6085-403e-aafe-c45b26962cd7
+2025-07-20 06:34:48,797 - __main__ - INFO - Started new research session: 6e3185d6-6085-403e-aafe-c45b26962cd7
+2025-07-20 06:34:59,425 - __main__ - INFO - Processing query: pydantic AI
+2025-07-20 06:34:59,425 - agents.orchestrator_agent - INFO - Processing query: pydantic AI...
+2025-07-20 06:34:59,426 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-20 06:34:59,426 - agents.orchestrator_agent - INFO - Restored context for session 6e3185d6-6085-403e-aafe-c45b26962cd7: 0 interactions, 0 findings
+2025-07-20 06:34:59,426 - agents.orchestrator_agent - INFO - Loaded research session: 6e3185d6-6085-403e-aafe-c45b26962cd7
+2025-07-20 06:34:59,427 - agents.search_agent - INFO - SearchAgent processing query: pydantic AI...
+2025-07-20 06:34:59,427 - tools.google_search - INFO - Performing Google search for: pydantic AI...
+2025-07-20 06:34:59,898 - googleapiclient.http - WARNING - Encountered 403 Forbidden with reason "forbidden"
+2025-07-20 06:34:59,898 - tools.google_search - ERROR - An HTTP error occurred during Google search: <HttpError 403 when requesting https://customsearch.googleapis.com/customsearch/v1?q=pydantic+AI&cx=f3970a50211a34e48&num=20&key=AIzaSyCsZ_yfKZcbGPt62AKLldu5Hq-pu5HgoLM&alt=json returned "Requests to this API customsearch method google.customsearch.v1.CustomSearchService.List are blocked.". Details: "[{'message': 'Requests to this API customsearch method google.customsearch.v1.CustomSearchService.List are blocked.', 'domain': 'global', 'reason': 'forbidden'}]">
+2025-07-20 06:34:59,899 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
