@@ -7,6 +7,7 @@ The Smart Research Assistant is an advanced AI-powered application built on the 
 - **Multi-Agent Architecture**: A central orchestrator agent coordinates specialized agents for search, verification, summarization, and analysis.
 - **Session Management**: Persistent research sessions allow you to pick up your work where you left off.
 - **Interactive CLI**: An easy-to-use command-line interface for interacting with the assistant.
+- **Multiple Search Engines**: Uses SerpAPI to search across Google, Bing, and other search engines.
 - **Extensible**: The modular design makes it easy to add new specialized agents and tools.
 
 ## Getting Started
@@ -27,7 +28,11 @@ The Smart Research Assistant is an advanced AI-powered application built on the 
     ```bash
     pip install -r requirements.txt
     ```
-3.  Create a `.env` file and add your API keys.
+3.  Create a `.env` file and add your API keys:
+    ```
+    OPENAI_API_KEY=your_openai_api_key
+    SERPAPI_API_KEY=your_serpapi_api_key
+    ```
 
 ### Running the Assistant
 
@@ -49,7 +54,7 @@ graph TD
     Orchestrator <--> VerificationAgent[Verification Agent]
     Orchestrator <--> SummaryAgent[Summary Agent]
     Orchestrator <--> AnalysisAgent[Analysis Agent]
-    SearchAgent <--> SearchTool[Google Search Tool]
+    SearchAgent <--> SearchTool[SerpAPI Search Tool]
     Orchestrator <--> SessionManager[Session Manager]
     SessionManager <--> Storage[(Persistent Storage)]
 ```

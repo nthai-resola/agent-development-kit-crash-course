@@ -6,10 +6,10 @@ from agents.search_agent import SearchAgent
 
 @pytest.fixture
 def search_agent():
-    with patch('agents.search_agent.GoogleSearchTool') as MockGoogleSearchTool, \
+    with patch('agents.search_agent.SearchTool') as MockSearchTool, \
          patch('agents.search_agent.Agent') as MockAgent:
         
-        mock_search_tool = MockGoogleSearchTool.return_value
+        mock_search_tool = MockSearchTool.return_value
         mock_structured_data_extractor = MockAgent.return_value
         
         agent = SearchAgent(model="test_model")
@@ -77,6 +77,38 @@ async def test_search_agent_structured_data_extraction_fails(search_agent):
     # Assert
     assert result["success"] is False
     assert result["content"] == "Could not extract structured data from search results."
+
+@pytest.mark.asyncio
+async def test_search_agent_with_multiple_engines(search_agent):
+    # Arrange
+    query = "test query with multiple engines"
+    raw_search_results = [
+        {"title": "Google Result", "link": "https://example.com", "snippet": "A Google result."},
+        {"title": "Bing Result", "link": "https://example.org", "snippet": "A Bing result."}
+    ]
+    
+    structured_search_result = StructuredSearchResult(
+        query=query,
+        key_takeaways=["takeaway"],
+        results=[
+            SearchResult(title="Google Result", link="https://example.com", snippet="A Google result.", is_paywalled=False, paywall_reason=""),
+            SearchResult(title="Bing Result", link="https://example.org", snippet="A Bing result.", is_paywalled=False, paywall_reason="")
+        ],
+        related_topics=["topic"]
+    )
+    
+    context = {"use_multiple_engines": True}
+    
+    search_agent.search_tool.search_multiple_engines = AsyncMock(return_value=raw_search_results)
+    search_agent.structured_data_extractor.run = AsyncMock(return_value=structured_search_result)
+    
+    # Act
+    result = await search_agent.process(query, context)
+    
+    # Assert
+    assert result["success"] is True
+    assert search_agent.search_tool.search_multiple_engines.called
+    assert not hasattr(search_agent.search_tool, 'search.called')
 
 def test_prioritize_results(search_agent):
     # Arrange

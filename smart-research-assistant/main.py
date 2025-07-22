@@ -160,7 +160,19 @@ async def main_cli():
             if result["success"]:
                 console.print(Panel(result["response"], title="[bold blue]Research Results[/bold blue]"))
             else:
-                console.print(Panel(f"An error occurred: {result.get('error', 'Unknown error')}", title="[bold red]Error[/bold red]"))
+                # Enhanced error display with more specific messages
+                error_message = result.get("error", "Unknown error")
+                suggestion = ""
+                
+                # Add helpful suggestions based on error patterns
+                if "HttpError" in error_message and "400" in error_message:
+                    suggestion = "\nTry rephrasing your query or checking for typos."
+                elif "HttpError" in error_message and "429" in error_message:
+                    suggestion = "\nAPI rate limit reached. Please try again later."
+                elif "HttpError" in error_message and ("401" in error_message or "403" in error_message):
+                    suggestion = "\nAPI authentication issue. Please check your API keys."
+                
+                console.print(Panel(f"I apologize, but I wasn't able to process your query successfully. Please try rephrasing your question or check if all required services are available.{suggestion}", title="[bold red]Research Results[/bold red]"))
     
     except Exception as e:
         console.print(Panel(f"An unexpected error occurred: {e}", title="[bold red]Fatal Error[/bold red]"))

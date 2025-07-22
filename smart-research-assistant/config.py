@@ -23,8 +23,7 @@ class Config:
     
     # API Keys
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-    GOOGLE_CSE_ID = os.getenv("GOOGLE_CSE_ID")
+    SERPAPI_API_KEY = os.getenv("SERPAPI_API_KEY")  # SerpAPI key for search
     
     # Storage configuration
     STORAGE_TYPE = os.getenv("STORAGE_TYPE", "file")
@@ -54,8 +53,7 @@ class Config:
         """Validate that required configuration is present."""
         required_keys = [
             "OPENAI_API_KEY",
-            "GOOGLE_API_KEY", 
-            "GOOGLE_CSE_ID"
+            "SERPAPI_API_KEY",
         ]
         
         missing_keys = []

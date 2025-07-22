@@ -2,11 +2,11 @@
 google-adk
 pydantic-ai==0.0.14
 python-dotenv==1.1.0
-google-api-python-client
 pydantic-ai
 matplotlib
 aiofiles
 rich
+serpapi  # Search API client
 
 # Testing and linting
 pytest>=7.4.2

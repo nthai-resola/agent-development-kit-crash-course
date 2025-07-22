@@ -193,3 +193,193 @@ pydantic_ai.exceptions.UserError: Unknown model: gpt-4
 2025-07-20 06:34:59,898 - googleapiclient.http - WARNING - Encountered 403 Forbidden with reason "forbidden"
 2025-07-20 06:34:59,898 - tools.google_search - ERROR - An HTTP error occurred during Google search: <HttpError 403 when requesting https://customsearch.googleapis.com/customsearch/v1?q=pydantic+AI&cx=f3970a50211a34e48&num=20&key=AIzaSyCsZ_yfKZcbGPt62AKLldu5Hq-pu5HgoLM&alt=json returned "Requests to this API customsearch method google.customsearch.v1.CustomSearchService.List are blocked.". Details: "[{'message': 'Requests to this API customsearch method google.customsearch.v1.CustomSearchService.List are blocked.', 'domain': 'global', 'reason': 'forbidden'}]">
 2025-07-20 06:34:59,899 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 14:01:41,557 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-22 14:01:41,560 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-07-22 14:01:42,322 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-22 14:01:42,322 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-22 14:01:42,322 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-22 14:01:42,323 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-22 14:01:42,323 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-22 14:01:42,326 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 14:01:42,327 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-22 14:01:42,328 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-22 14:01:52,015 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 14:01:52,015 - session_manager - INFO - Loaded session: 6e3185d6-6085-403e-aafe-c45b26962cd7
+2025-07-22 14:01:57,545 - __main__ - INFO - Processing query: padantic AI
+2025-07-22 14:01:57,545 - agents.orchestrator_agent - INFO - Processing query: padantic AI...
+2025-07-22 14:01:57,546 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 14:01:57,546 - agents.orchestrator_agent - INFO - Restored context for session 6e3185d6-6085-403e-aafe-c45b26962cd7: 1 interactions, 0 findings
+2025-07-22 14:01:57,547 - agents.orchestrator_agent - INFO - Loaded research session: 6e3185d6-6085-403e-aafe-c45b26962cd7
+2025-07-22 14:01:57,547 - agents.search_agent - INFO - SearchAgent processing query: padantic AI...
+2025-07-22 14:01:57,547 - tools.google_search - INFO - Performing Google search for: padantic AI...
+2025-07-22 14:01:57,977 - tools.google_search - ERROR - An HTTP error occurred during Google search: <HttpError 400 when requesting https://customsearch.googleapis.com/customsearch/v1?q=padantic+AI&cx=f3970a50211a34e48&num=20&key=AIzaSyC3oUdDdubl1Up3UbFGxJ9gYW1WNBHhKuA&alt=json returned "Request contains an invalid argument.". Details: "[{'message': 'Request contains an invalid argument.', 'domain': 'global', 'reason': 'badRequest'}]">
+2025-07-22 14:01:57,982 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 14:08:02,072 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-22 14:08:02,075 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-07-22 14:08:02,871 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-22 14:08:02,871 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-22 14:08:02,871 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-22 14:08:02,871 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-22 14:08:02,871 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-22 14:08:02,874 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 14:08:02,876 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-22 14:08:02,877 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-22 14:08:05,507 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 14:08:05,507 - session_manager - INFO - Loaded session: 6e3185d6-6085-403e-aafe-c45b26962cd7
+2025-07-22 14:08:09,246 - __main__ - INFO - Processing query: pydanticAI
+2025-07-22 14:08:09,246 - agents.orchestrator_agent - INFO - Processing query: pydanticAI...
+2025-07-22 14:08:09,247 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 14:08:09,247 - agents.orchestrator_agent - INFO - Restored context for session 6e3185d6-6085-403e-aafe-c45b26962cd7: 2 interactions, 0 findings
+2025-07-22 14:08:09,247 - agents.orchestrator_agent - INFO - Loaded research session: 6e3185d6-6085-403e-aafe-c45b26962cd7
+2025-07-22 14:08:09,247 - agents.search_agent - INFO - SearchAgent processing query: pydanticAI...
+2025-07-22 14:08:09,248 - tools.google_search - INFO - Performing Google search for: pydanticAI...
+2025-07-22 14:08:09,248 - tools.google_search - INFO - Sanitized query: pydanticAI
+2025-07-22 14:08:09,591 - tools.google_search - ERROR - Bad request error (400) in Google search. Check query format and API parameters: <HttpError 400 when requesting https://customsearch.googleapis.com/customsearch/v1?q=pydanticAI&cx=f3970a50211a34e48&num=20&key=AIzaSyC3oUdDdubl1Up3UbFGxJ9gYW1WNBHhKuA&alt=json returned "Request contains an invalid argument.". Details: "[{'message': 'Request contains an invalid argument.', 'domain': 'global', 'reason': 'badRequest'}]">
+2025-07-22 14:08:09,593 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 14:25:30,717 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-22 14:25:31,504 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-22 14:25:31,504 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-22 14:25:31,504 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-22 14:25:31,504 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-22 14:25:31,504 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-22 14:25:31,508 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 14:25:31,510 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-22 14:25:31,511 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-22 14:26:03,618 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-22 14:26:04,089 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-22 14:26:04,089 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-22 14:26:04,089 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-22 14:26:04,090 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-22 14:26:04,090 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-22 14:26:04,092 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 14:26:04,093 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-22 14:26:04,094 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-22 14:26:05,734 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 14:26:05,735 - session_manager - INFO - Loaded session: 6e3185d6-6085-403e-aafe-c45b26962cd7
+2025-07-22 14:26:10,586 - __main__ - INFO - Processing query: pydanticAI
+2025-07-22 14:26:10,586 - agents.orchestrator_agent - INFO - Processing query: pydanticAI...
+2025-07-22 14:26:10,586 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 14:26:10,587 - agents.orchestrator_agent - INFO - Restored context for session 6e3185d6-6085-403e-aafe-c45b26962cd7: 3 interactions, 0 findings
+2025-07-22 14:26:10,587 - agents.orchestrator_agent - INFO - Loaded research session: 6e3185d6-6085-403e-aafe-c45b26962cd7
+2025-07-22 14:26:10,587 - agents.search_agent - INFO - SearchAgent processing query: pydanticAI...
+2025-07-22 14:26:10,587 - tools.search_tool - INFO - Performing google search for: pydanticAI...
+2025-07-22 14:26:10,587 - tools.search_tool - INFO - Sanitized query: pydantic AI
+2025-07-22 14:26:12,368 - tools.search_tool - INFO - Search returned 4 results
+2025-07-22 14:26:12,368 - agents.search_agent - ERROR - Error during search: Unknown keyword arguments: `input_text`, `pydantic_model`
+2025-07-22 14:26:12,370 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 15:01:51,641 - __main__ - INFO - Processing query: eit
+2025-07-22 15:01:51,644 - agents.orchestrator_agent - INFO - Processing query: eit...
+2025-07-22 15:01:51,648 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 15:01:51,649 - agents.orchestrator_agent - INFO - Restored context for session 6e3185d6-6085-403e-aafe-c45b26962cd7: 4 interactions, 0 findings
+2025-07-22 15:01:51,649 - agents.orchestrator_agent - INFO - Loaded research session: 6e3185d6-6085-403e-aafe-c45b26962cd7
+2025-07-22 15:01:51,650 - agents.search_agent - INFO - SearchAgent processing query: eit...
+2025-07-22 15:01:51,650 - tools.search_tool - INFO - Performing google search for: eit...
+2025-07-22 15:01:51,650 - tools.search_tool - INFO - Sanitized query: eit
+2025-07-22 15:04:55,162 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-22 15:04:56,100 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-22 15:04:56,100 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-22 15:04:56,101 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-22 15:04:56,101 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-22 15:04:56,101 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-22 15:04:56,106 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 15:04:56,107 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-22 15:04:56,109 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-22 15:09:22,160 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 15:09:22,160 - session_manager - INFO - Loaded session: 6e3185d6-6085-403e-aafe-c45b26962cd7
+2025-07-22 15:09:28,298 - __main__ - INFO - Processing query: chatGPT agent
+2025-07-22 15:09:28,298 - agents.orchestrator_agent - INFO - Processing query: chatGPT agent...
+2025-07-22 15:09:28,299 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 15:09:28,299 - agents.orchestrator_agent - INFO - Restored context for session 6e3185d6-6085-403e-aafe-c45b26962cd7: 4 interactions, 0 findings
+2025-07-22 15:09:28,299 - agents.orchestrator_agent - INFO - Loaded research session: 6e3185d6-6085-403e-aafe-c45b26962cd7
+2025-07-22 15:09:28,300 - agents.search_agent - INFO - SearchAgent processing query: chatGPT agent...
+2025-07-22 15:09:28,301 - tools.search_tool - INFO - Performing google search for: chatGPT agent...
+2025-07-22 15:09:28,301 - tools.search_tool - INFO - Sanitized query: chat GPT agent
+2025-07-22 15:09:30,017 - tools.search_tool - INFO - Search returned 7 results
+2025-07-22 15:10:07,759 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-22 15:10:07,773 - agents.search_agent - INFO - Result type: <class 'pydantic_ai.result.RunResult'>
+2025-07-22 15:10:07,774 - agents.search_agent - INFO - Accessing result.data
+2025-07-22 15:10:07,778 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 15:11:26,628 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-22 15:11:27,449 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-22 15:11:27,449 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-22 15:11:27,449 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-22 15:11:27,449 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-22 15:11:27,449 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-22 15:11:27,452 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 15:11:27,453 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-22 15:11:27,455 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-22 15:11:34,433 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-22 15:11:34,433 - session_manager - INFO - Loaded session: 066bc1e7-374f-4a15-9faf-4d6f020009b1
+2025-07-22 15:11:36,759 - __main__ - INFO - Processing query: resola ai
+2025-07-22 15:11:36,759 - agents.orchestrator_agent - INFO - Processing query: resola ai...
+2025-07-22 15:11:36,760 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-22 15:11:36,760 - agents.orchestrator_agent - INFO - Restored context for session 066bc1e7-374f-4a15-9faf-4d6f020009b1: 2 interactions, 0 findings
+2025-07-22 15:11:36,760 - agents.orchestrator_agent - INFO - Loaded research session: 066bc1e7-374f-4a15-9faf-4d6f020009b1
+2025-07-22 15:11:36,760 - agents.search_agent - INFO - SearchAgent processing query: resola ai...
+2025-07-22 15:11:36,760 - tools.search_tool - INFO - Performing google search for: resola ai...
+2025-07-22 15:11:36,761 - tools.search_tool - INFO - Sanitized query: resola ai
+2025-07-22 15:11:37,795 - tools.search_tool - INFO - Search returned 10 results
+2025-07-22 15:12:03,236 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-22 15:12:03,245 - agents.search_agent - INFO - Result type: <class 'pydantic_ai.result.RunResult'>
+2025-07-22 15:12:03,245 - agents.search_agent - INFO - Accessing result.data
+2025-07-22 15:12:03,247 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-22 15:12:47,737 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-22 15:12:48,407 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-22 15:12:48,407 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-22 15:12:48,407 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-22 15:12:48,407 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-22 15:12:48,407 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-22 15:12:48,410 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 15:12:48,411 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-22 15:12:48,412 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-22 15:13:13,835 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520.json
+2025-07-22 15:13:13,835 - session_manager - INFO - Created new session: e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520
+2025-07-22 15:13:13,835 - __main__ - INFO - Started new research session: e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520
+2025-07-22 15:13:19,102 - __main__ - INFO - Processing query: A2A protocal
+2025-07-22 15:13:19,102 - agents.orchestrator_agent - INFO - Processing query: A2A protocal...
+2025-07-22 15:13:19,103 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520.json
+2025-07-22 15:13:19,103 - agents.orchestrator_agent - INFO - Restored context for session e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520: 0 interactions, 0 findings
+2025-07-22 15:13:19,103 - agents.orchestrator_agent - INFO - Loaded research session: e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520
+2025-07-22 15:13:19,103 - agents.search_agent - INFO - SearchAgent processing query: A2A protocal...
+2025-07-22 15:13:19,103 - tools.search_tool - INFO - Performing google search for: A2A protocal...
+2025-07-22 15:13:19,104 - tools.search_tool - INFO - Sanitized query: A2A protocal
+2025-07-22 15:13:21,758 - tools.search_tool - INFO - Search returned 8 results
+2025-07-22 15:13:48,192 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-22 15:13:48,201 - agents.search_agent - INFO - Result type: <class 'pydantic_ai.result.RunResult'>
+2025-07-22 15:13:48,201 - agents.search_agent - INFO - Accessing result.data
+2025-07-22 15:13:48,203 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520.json
+2025-07-22 15:21:31,051 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-22 15:21:31,906 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-22 15:21:31,906 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-22 15:21:31,907 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-22 15:21:31,907 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-22 15:21:31,907 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-22 15:21:31,911 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 15:21:31,912 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520.json
+2025-07-22 15:21:31,914 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-22 15:21:31,915 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-22 15:26:42,676 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520.json
+2025-07-22 15:26:42,677 - session_manager - INFO - Loaded session: e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520
+2025-07-22 15:26:59,330 - __main__ - INFO - Processing query: create A2A with google adk and crewAI
+2025-07-22 15:26:59,330 - agents.orchestrator_agent - INFO - Processing query: create A2A with google adk and crewAI...
+2025-07-22 15:26:59,331 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520.json
+2025-07-22 15:26:59,333 - agents.orchestrator_agent - INFO - Restored context for session e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520: 1 interactions, 0 findings
+2025-07-22 15:26:59,333 - agents.orchestrator_agent - INFO - Loaded research session: e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520
+2025-07-22 15:26:59,335 - agents.search_agent - INFO - SearchAgent processing query: create A2A with google adk and crewAI...
+2025-07-22 15:26:59,335 - tools.search_tool - INFO - Performing google search for: create A2A with google adk and crewAI...
+2025-07-22 15:26:59,335 - tools.search_tool - INFO - Sanitized query: create A2A with google adk and crew AI
+2025-07-22 15:27:02,623 - tools.search_tool - INFO - Search returned 7 results
+2025-07-22 15:27:57,239 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-22 15:27:57,255 - agents.search_agent - INFO - Result type: <class 'pydantic_ai.result.RunResult'>
+2025-07-22 15:27:57,255 - agents.search_agent - INFO - Accessing result.data
+2025-07-22 15:27:57,259 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520.json
+2025-07-22 15:28:15,571 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-22 15:28:16,385 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-22 15:28:16,385 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-22 15:28:16,385 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-22 15:28:16,385 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-22 15:28:16,385 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-22 15:28:16,389 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-22 15:28:16,390 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520.json
+2025-07-22 15:28:16,391 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-22 15:28:16,392 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json

@@ -1,0 +1,58 @@
+{
+  "session_id": "e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520",
+  "created_at": "2025-07-22T15:13:13.833489",
+  "updated_at": "2025-07-22T15:27:57.256286",
+  "topic": "A2A agent protocal",
+  "queries": [
+    {
+      "query_id": "f88b382c-20a5-44f2-b408-d25246955ae2",
+      "timestamp": "2025-07-22T15:13:19.103651",
+      "text": "A2A protocal",
+      "agent": "OrchestratorAgent",
+      "results": [
+        {
+          "result_id": "5e40a1c9-b24f-47d8-a133-51622f2c7799",
+          "source": "search",
+          "content": "Key Takeaways:\n- A2A (Agent to Agent) protocol is a standard that allows AI agents to communicate and collaborate with each other.\n- This protocol enables AI agents to exchange information securely and coordinate actions, across different platforms and frameworks.\n- The A2A protocol is designed to address the challenge of interoperability between AI agents that are built on diverse frameworks by different companies.\n\nResults:\nTitle: Announcing the Agent2Agent Protocol (A2A)\nLink: https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/\nSnippet: The A2A protocol will allow AI agents to communicate with each other, securely exchange information, and coordinate actions on top of various enterprise ...\n\nTitle: A2A Protocol - Agent2Agent Communication\nLink: https://a2aprotocol.ai/\nSnippet: A2A Protocol is an open standard that enables AI agents to communicate and collaborate across different platforms and frameworks, regardless of their ...\n\nTitle: a2aproject/A2A: An open protocol enabling communication ...\nLink: https://github.com/a2aproject/A2A\nSnippet: The Agent2Agent (A2A) protocol addresses a critical challenge in the AI landscape: enabling gen AI agents, built on diverse frameworks by different companies.\n\nTitle: What Every AI Engineer Should Know About A2A, MCP & ...\nLink: https://medium.com/@elisowski/what-every-ai-engineer-should-know-about-a2a-mcp-acp-8335a210a742\nSnippet: The Agent-to-Agent (A2A) Protocol, introduced by Google, is a cross-platform specification for enabling AI agents to communicate, collaborate, and delegate ...\nPaywall: Medium Membership\n\nRelated Topics:\n- AI interoperability\n- AI frameworks\n- Google AI research\n- Secure communication protocols",
+          "confidence": 0.9,
+          "verified": false,
+          "metadata": {
+            "sources": [
+              "https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/",
+              "https://a2aprotocol.ai/",
+              "https://github.com/a2aproject/A2A",
+              "https://medium.com/@elisowski/what-every-ai-engineer-should-know-about-a2a-mcp-acp-8335a210a742"
+            ]
+          },
+          "timestamp": "2025-07-22T15:13:48.202186"
+        }
+      ]
+    },
+    {
+      "query_id": "ad71eb77-e265-4919-a068-3641d189ef4f",
+      "timestamp": "2025-07-22T15:26:59.334798",
+      "text": "create A2A with google adk and crewAI",
+      "agent": "OrchestratorAgent",
+      "results": [
+        {
+          "result_id": "0b713cc1-3bf2-4c86-9961-017dba4b031f",
+          "source": "search",
+          "content": "Key Takeaways:\n- Building an A2A agent involves defining the core agent and its tools, and using the ADK and A2A framework.\n- Google's Agent Development Kit works well with preferred tools and is optimized for Gemini and Vertex AI.\n- The Agent2Agent protocol is an open protocol for AI interoperability.\n\nResults:\nTitle: Unlock AI agent collaboration. Convert ADK agents for A2A\nLink: https://cloud.google.com/blog/products/ai-machine-learning/unlock-ai-agent-collaboration-convert-adk-agents-for-a2a\nSnippet: A guide to converting ADK agents with MCP to the A2A framework · Step 1: Define the core agent and its MCP tool (agent.py) · Step 2: Establish a ...\n\nTitle: Build and manage multi-system agents with Vertex AI\nLink: https://cloud.google.com/blog/products/ai-machine-learning/build-and-manage-multi-system-agents-with-vertex-ai\nSnippet: While ADK works with your preferred tools, it's optimized for Gemini and Vertex AI. For example, AI agents built with ADK using Gemini 2.5 Pro ...\n\nTitle: Build A2A Agent with Google ADK\nLink: https://medium.com/fundamentals-of-artificial-intellegence/build-a2a-agent-with-google-adk-05fb31038e68\nSnippet: In this blog, I'll show you how to build your own A2A agent using Google's new Agent Development Kit (ADK).\n\nTitle: Using Google's Agent Development Kit and Agent2Agent\nLink: https://wandb.ai/gladiator/Google-Agent2Agent/reports/Using-Google-s-Agent-Development-Kit-and-Agent2Agent--VmlldzoxMjIyODEwOA\nSnippet: Discover the Agent2Agent (A2A) open protocol for AI interoperability. Learn A2A principles & build a multi-agent system using Google's ADK in our tutorial.\n\nRelated Topics:\n- Google Agent Development Kit (ADK)\n- Agent2Agent Protocol\n- AI Interoperability\n- Vertex AI\n- Gemini 2.5 Pro",
+          "confidence": 0.9,
+          "verified": false,
+          "metadata": {
+            "sources": [
+              "https://cloud.google.com/blog/products/ai-machine-learning/unlock-ai-agent-collaboration-convert-adk-agents-for-a2a",
+              "https://cloud.google.com/blog/products/ai-machine-learning/build-and-manage-multi-system-agents-with-vertex-ai",
+              "https://medium.com/fundamentals-of-artificial-intellegence/build-a2a-agent-with-google-adk-05fb31038e68",
+              "https://wandb.ai/gladiator/Google-Agent2Agent/reports/Using-Google-s-Agent-Development-Kit-and-Agent2Agent--VmlldzoxMjIyODEwOA"
+            ]
+          },
+          "timestamp": "2025-07-22T15:27:57.256263"
+        }
+      ]
+    }
+  ],
+  "findings": [],
+  "notes": []
+}
