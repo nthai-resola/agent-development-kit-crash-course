@@ -99,6 +99,8 @@ async def test_search_agent_with_multiple_engines(search_agent):
     
     context = {"use_multiple_engines": True}
     
+    # Set up both search methods as mocks
+    search_agent.search_tool.search = AsyncMock()
     search_agent.search_tool.search_multiple_engines = AsyncMock(return_value=raw_search_results)
     search_agent.structured_data_extractor.run = AsyncMock(return_value=structured_search_result)
     
@@ -108,7 +110,7 @@ async def test_search_agent_with_multiple_engines(search_agent):
     # Assert
     assert result["success"] is True
     assert search_agent.search_tool.search_multiple_engines.called
-    assert not hasattr(search_agent.search_tool, 'search.called')
+    assert not search_agent.search_tool.search.called
 
 def test_prioritize_results(search_agent):
     # Arrange

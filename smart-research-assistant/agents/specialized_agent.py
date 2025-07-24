@@ -8,12 +8,14 @@ import asyncio
 
 try:
     from .base_agent import BaseResearchAgent
+    from tools.agent_logger import AgentLogger
 except ImportError:
     # For standalone testing
     import sys
     import os
     sys.path.append(os.path.dirname(os.path.dirname(__file__)))
     from agents.base_agent import BaseResearchAgent
+    from tools.agent_logger import AgentLogger
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +36,7 @@ class SpecializedAgent(BaseResearchAgent):
         """
         super().__init__(model, name)
         self.agent_type = agent_type
+        self.agent_logger = AgentLogger(name, agent_type)
         self._initialize_agent()
 
     def _initialize_agent(self):
@@ -45,25 +48,42 @@ class SpecializedAgent(BaseResearchAgent):
             "initialized": True
         }
         logger.debug(f"Specialized agent '{self.name}' of type '{self.agent_type}' initialized")
-
+        self.agent_logger.info(f"Initialized with model: {self.model}")
+        
     async def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """
         Process a query and return results.
-
-        This is a placeholder implementation. In a real scenario, this method
-        would perform the specialized task (e.g., web search, fact-checking).
-        """
-        logger.info(f"Specialized agent '{self.name}' processing query: {query[:100]}...")
         
-        # Simulate processing
-        await asyncio.sleep(1)
-
-        return {
-            "success": True,
-            "content": f"Results for '{query}' from {self.name}",
-            "confidence": 0.9,
-            "verified": self.agent_type == "verification",
-            "metadata": {
-                "source": self.name
+        Args:
+            query: The query to process
+            context: Optional context information
+            
+        Returns:
+            Dictionary containing the processing results
+        """
+        task_description = f"process query: '{query[:50]}{'...' if len(query) > 50 else ''}'"
+        self.agent_logger.start(task_description)
+        
+        try:
+            # This method should be implemented by subclasses
+            # Default implementation returns a not-implemented error
+            result = {
+                "success": False,
+                "error": f"{self.name} has not implemented processing logic",
+                "content": ""
             }
-        } 
+            
+            self.agent_logger.error(result["error"])
+            return result
+        except Exception as e:
+            error_msg = f"Error processing query: {str(e)}"
+            self.agent_logger.error(error_msg, e)
+            return {
+                "success": False,
+                "error": error_msg,
+                "content": ""
+            }
+        finally:
+            success = result.get("success", False) if 'result' in locals() else False
+            status = "completed successfully" if success else "failed"
+            self.agent_logger.complete(task_description, status) 

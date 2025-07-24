@@ -12,12 +12,14 @@ import aiohttp
 
 try:
     from ..config import Config
+    from ..tools.agent_logger import AgentLogger
 except ImportError:
     # For standalone testing
     import sys
     import os
     sys.path.append(os.path.dirname(os.path.dirname(__file__)))
     from config import Config
+    from tools.agent_logger import AgentLogger
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +35,7 @@ class SearchTool:
         """
         self.api_key = Config.SERPAPI_API_KEY
         self.base_url = "https://serpapi.com/search"
+        self.agent_logger = AgentLogger("SearchTool", "tool")
 
     def _sanitize_query(self, query: str) -> str:
         """
@@ -57,79 +60,68 @@ class SearchTool:
         query = re.sub(r'\s+', ' ', query)
         
         return query
-
-    async def search(self, query: str, num_results: int = 10, search_engine: str = "google") -> list:
+    
+    async def search(self, query: str, num_results: int = 10) -> List[Dict[str, Any]]:
         """
         Perform a web search using SerpAPI.
         
         Args:
             query: The search query
-            num_results: The number of results to return (default: 10)
-            search_engine: The search engine to use (default: "google")
+            num_results: Maximum number of results to return
             
         Returns:
-            A list of search result items
+            A list of search result dictionaries
         """
-        logger.info(f"Performing {search_engine} search for: {query[:100]}...")
+        sanitized_query = self._sanitize_query(query)
+        self.agent_logger.info(f"Searching for: {sanitized_query}")
         
         try:
-            # Ensure the query is valid
-            if not query or not query.strip():
-                logger.error("Search query is empty or contains only whitespace")
-                return []
-            
-            # Sanitize the query
-            sanitized_query = self._sanitize_query(query)
-            if not sanitized_query:
-                logger.error(f"Query '{query}' was sanitized to an empty string")
-                return []
-                
-            logger.info(f"Sanitized query: {sanitized_query[:100]}")
-            
-            # Cap num_results to avoid unnecessary cost
-            if num_results > 10:
-                logger.warning(f"Capping requested results from {num_results} to 10")
-                num_results = 10
-                
-            # Set up the request parameters
             params = {
-                "api_key": self.api_key,
                 "q": sanitized_query,
+                "api_key": self.api_key,
+                "engine": "google",
                 "num": num_results,
-                "engine": search_engine,
+                "gl": "us",  # Google locale (country)
+                "hl": "en"   # Host language
             }
             
-            # Make the API request
+            self.agent_logger.debug(f"Sending request to SerpAPI: {self.base_url}")
             async with aiohttp.ClientSession() as session:
                 async with session.get(self.base_url, params=params) as response:
                     if response.status != 200:
                         error_text = await response.text()
-                        logger.error(f"SerpAPI error ({response.status}): {error_text}")
+                        self.agent_logger.error(f"SerpAPI error: HTTP {response.status} - {error_text}")
                         return []
-                        
+                    
                     data = await response.json()
-            
-            # Process the results
-            organic_results = data.get("organic_results", [])
-            logger.info(f"Search returned {len(organic_results)} results")
-            
-            # Transform the results to match the expected format
-            transformed_results = []
-            for result in organic_results:
-                transformed_results.append({
-                    "title": result.get("title", ""),
-                    "link": result.get("link", ""),
-                    "snippet": result.get("snippet", ""),
-                    "source": search_engine
-                })
-            
-            return transformed_results
+                    
+            if "error" in data:
+                self.agent_logger.error(f"SerpAPI error: {data['error']}")
+                return []
                 
+            organic_results = data.get("organic_results", [])
+            self.agent_logger.info(f"Received {len(organic_results)} results from search API")
+            
+            # Include knowledge graph if available
+            if "knowledge_graph" in data:
+                kg = data["knowledge_graph"]
+                if "title" in kg and "description" in kg:
+                    kg_result = {
+                        "title": kg["title"],
+                        "snippet": kg["description"],
+                        "link": kg.get("website", ""),
+                        "is_knowledge_graph": True
+                    }
+                    organic_results.insert(0, kg_result)
+                    self.agent_logger.info(f"Added knowledge graph result: {kg['title']}")
+                
+            return organic_results[:num_results]
+            
         except aiohttp.ClientError as e:
-            logger.error(f"HTTP client error during search: {e}")
+            self.agent_logger.error(f"Request error: {str(e)}")
             return []
         except Exception as e:
-            logger.error(f"Unexpected error during search: {e}")
+            self.agent_logger.error(f"Unexpected error during search: {str(e)}")
             return []
 
     async def search_multiple_engines(self, query: str, num_results: int = 5) -> list:

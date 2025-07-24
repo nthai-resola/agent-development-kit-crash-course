@@ -1,12 +1,14 @@
 """
 Search Agent for the Smart Research Assistant.
+
+The Search Agent is responsible for executing searches and extracting structured data from search results.
 """
 
 import logging
 from typing import Dict, Any, List
-from pydantic import ValidationError, Field, field_validator
+from pydantic import BaseModel, Field
 from pydantic_ai import Agent
-from models.data_models import SearchResult, StructuredSearchResult
+
 from tools.search_tool import SearchTool
 from agents.specialized_agent import SpecializedAgent
 
@@ -15,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 class SearchAgent(SpecializedAgent):
     """
-    A specialized agent for performing web searches.
+    A specialized agent for executing web searches.
     """
 
     def __init__(self, model: str, name: str = "SearchAgent"):
@@ -28,188 +30,172 @@ class SearchAgent(SpecializedAgent):
         """
         super().__init__(model, name, agent_type="search")
         self.search_tool = SearchTool()
-        # In pydantic-ai 0.0.14, specify the result_type at agent creation time
-        self.structured_data_extractor = Agent(model=self.model, result_type=StructuredSearchResult)
+        
+        # Define the extraction model
+        class SearchSummary(BaseModel):
+            content: str = Field(..., description="Comprehensive summary of the search results that directly addresses the query")
+            sources: List[str] = Field(..., description="List of source URLs that contributed to the summary")
+            key_facts: List[str] = Field(default_factory=list, description="List of key facts or figures mentioned in the search results")
+            
+        self.structured_data_extractor = Agent(model=self.model, result_type=SearchSummary)
+        self.agent_logger.info(f"Initialized search agent with model {model} and SerpAPI search tool")
 
     async def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """
-        Process a search query and return the results.
-        """
-        logger.info(f"{self.name} processing query: {query[:100]}...")
-        context = context or {}
+        Process a search query.
 
+        Args:
+            query: The query to process.
+            context: Optional context information.
+
+        Returns:
+            Dictionary containing the search results.
+        """
+        task_description = f"search for: '{query[:50]}{'...' if len(query) > 50 else ''}'"
+        self.agent_logger.start(task_description)
+        
         try:
-            advanced_query = self._prepare_advanced_query(query, context)
-            
-            # Use multiple search engines for more comprehensive results
-            if context.get("use_multiple_engines", False):
-                search_results = await self.search_tool.search_multiple_engines(advanced_query, 5)
-            else:
-                search_results = await self.search_tool.search(advanced_query)
+            self.agent_logger.info("Executing web search")
+            # Perform the search
+            search_results = await self._execute_search(query)
             
             if not search_results:
+                self.agent_logger.error("Search returned no results")
                 return {
                     "success": False,
-                    "content": "No search results found.",
-                    "confidence": 0.5,
-                    "metadata": {}
+                    "error": "No search results found",
+                    "content": f"I couldn't find any information about '{query}'.",
+                    "confidence": 0.0,
+                    "metadata": {"sources": []}
                 }
-
+            
+            # Extract structured data from search results
+            self.agent_logger.info("Extracting structured data from search results")
             structured_data = await self._extract_structured_data(query, search_results)
             
-            if not structured_data:
-                return {
-                    "success": False,
-                    "content": "Could not extract structured data from search results.",
-                    "confidence": 0.1,
-                    "metadata": {}
-                }
-
-            prioritized_results = self._prioritize_results(structured_data.results, context)
-
-            for result in prioritized_results:
-                is_paywalled, reason = self._detect_paywall(result)
-                if is_paywalled:
-                    result.is_paywalled = True
-                    result.paywall_reason = reason
-
-            formatted_results = self._format_results(structured_data)
-
-            return {
+            # Prepare response
+            sources = []
+            if structured_data and "sources" in structured_data:
+                sources = structured_data.get("sources", [])
+                self.agent_logger.info(f"Extracted {len(sources)} sources")
+            
+            content = ""
+            if structured_data and "content" in structured_data:
+                content = structured_data.get("content", "")
+                self.agent_logger.info(f"Extracted content: {len(content)} characters")
+            elif search_results:
+                # Fallback if structured extraction failed
+                self.agent_logger.info("Using raw search results as fallback")
+                content = "Here's what I found in my search:\n\n"
+                for i, result in enumerate(search_results[:5], 1):
+                    content += f"{i}. {result.get('title', 'No title')}\n"
+                    content += f"   {result.get('snippet', 'No description')}\n"
+                    content += f"   Source: {result.get('link', 'No link')}\n\n"
+                    sources.append(result.get('link', ''))
+            
+            result = {
                 "success": True,
-                "content": formatted_results,
-                "confidence": 0.9,
-                "metadata": {"sources": [res.link for res in structured_data.results]}
+                "content": content,
+                "confidence": 0.8 if structured_data else 0.5,
+                "verified": False,  # Search results are not verified
+                "metadata": {
+                    "sources": sources,
+                    "raw_results_count": len(search_results),
+                    "query": query
+                }
             }
+            
+            self.agent_logger.complete(task_description, f"found {len(sources)} sources")
+            return result
+            
         except Exception as e:
-            logger.error(f"Error during search: {e}")
+            error_msg = f"Error during search: {str(e)}"
+            self.agent_logger.error(error_msg, e)
+            
             return {
                 "success": False,
-                "content": f"An error occurred during the search: {e}",
-                "confidence": 0.1,
-                "metadata": {}
+                "error": error_msg,
+                "content": f"I encountered an error while searching for information about '{query}'.",
+                "confidence": 0.0,
+                "metadata": {"error_type": type(e).__name__}
             }
 
-    def _prepare_advanced_query(self, query: str, context: Dict[str, Any]) -> str:
+    async def _execute_search(self, query: str) -> List[Dict[str, Any]]:
         """
-        Prepare an advanced search query based on context.
-        """
-        if "research_focus" in context and context["research_focus"]:
-            return f"{context['research_focus']} {query}"
-        return query
+        Execute a search query using the search tool.
 
-    async def _extract_structured_data(self, query: str, results: List[Dict[str, Any]]) -> StructuredSearchResult:
-        """
-        Extract structured data from search results using an LLM.
+        Args:
+            query: The search query.
+
+        Returns:
+            A list of search result dictionaries.
         """
         try:
-            # Create a prompt for the structured data extraction
-            prompt = f"""
-Query: {query}
+            self.agent_logger.debug(f"Sending query to search API: {query}")
+            results = await self.search_tool.search(query)
+            
+            if not results or not isinstance(results, list):
+                self.agent_logger.error("Invalid search results structure")
+                return []
+                
+            self.agent_logger.debug(f"Received {len(results)} search results")
+            return results
+            
+        except Exception as e:
+            self.agent_logger.error(f"Search API error: {str(e)}", e)
+            raise
 
-Results:
-{'\n'.join([str(r) for r in results])}
+    async def _extract_structured_data(self, query: str, search_results: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Extract structured data from search results using pydantic-ai.
 
-Based on the search results, please provide:
-1. Key takeaways (at least 3)
-2. Structured results with title, link, snippet, and whether they are paywalled
-3. Related topics for further research
+        Args:
+            query: The original search query.
+            search_results: The raw search results.
 
-Format your response as a StructuredSearchResult object with:
-- key_takeaways: List of key insights from the results
-- results: List of SearchResult objects with title, link, snippet, is_paywalled, and paywall_reason
-- related_topics: List of related topics for further research
-"""
-            
-            # For pydantic-ai 0.0.14, just pass the prompt
-            result = await self.structured_data_extractor.run(prompt)
-            
-            # Debug the result object
-            logger.info(f"Result type: {type(result)}")
-            
-            # In pydantic-ai 0.0.14, the result is in the data attribute
-            if hasattr(result, 'data'):
-                logger.info("Accessing result.data")
-                return result.data
-            
-            # Create a dummy StructuredSearchResult for testing
-            # This is a fallback in case we can't extract the data properly
-            dummy_result = StructuredSearchResult(
-                key_takeaways=[
-                    "Python is a versatile programming language",
-                    "Python supports multiple programming paradigms",
-                    "Python has a large standard library"
-                ],
-                results=[
-                    SearchResult(
-                        title="Python.org",
-                        link="https://www.python.org",
-                        snippet="The official Python website with documentation and downloads",
-                        is_paywalled=False,
-                        paywall_reason=""
-                    ),
-                    SearchResult(
-                        title="Python Features - Wikipedia",
-                        link="https://en.wikipedia.org/wiki/Python_(programming_language)",
-                        snippet="Python is a high-level, general-purpose programming language.",
-                        is_paywalled=False,
-                        paywall_reason=""
-                    )
-                ],
-                related_topics=["Python libraries", "Python frameworks", "Python vs Java"]
+        Returns:
+            A dictionary containing extracted structured data.
+        """
+        try:
+            # Prepare search results for the extractor
+            formatted_results = "\n\n".join(
+                f"Title: {result.get('title', 'No title')}\n"
+                f"Link: {result.get('link', 'No link')}\n"
+                f"Snippet: {result.get('snippet', 'No description')}"
+                for result in search_results[:10]  # Limit to first 10 results
             )
             
-            logger.warning("Using dummy result as fallback")
-            return dummy_result
+            # Create the prompt for the structured data extractor
+            prompt = f"""
+            Based on the following search results for the query "{query}", please extract the most relevant information.
+            
+            SEARCH RESULTS:
+            {formatted_results}
+            
+            Please provide:
+            1. A well-structured and coherent summary of the information found in these results
+            2. A list of all sources (URLs) that contributed to this summary
+            3. Any key facts or figures mentioned
+            
+            The information should be comprehensive but focused on answering the original query.
+            """
+            
+            self.agent_logger.debug("Sending prompt to structured data extractor")
+            
+            # Extract structured data
+            result = await self.structured_data_extractor.run(prompt)
+            
+            # Access the structured data from the result
+            if not result or not hasattr(result, "data"):
+                self.agent_logger.error("Structured data extraction failed - no result or data attribute")
+                return {}
                 
-        except (ValueError, ValidationError) as e:
-            logger.error(f"Pydantic AI validation error: {e}")
-            return None
-
-    def _prioritize_results(self, results: list, context: Dict[str, Any]) -> list:
-        """
-        Prioritize search results based on preferred sources.
-        """
-        preferred_sources = context.get("user_preferences", {}).get("preferred_sources", [])
-        if not preferred_sources:
-            return results
-
-        prioritized = sorted(results, key=lambda r: any(pref in r.link for pref in preferred_sources), reverse=True)
-        return prioritized
-
-    def _detect_paywall(self, result: SearchResult) -> (bool, str):
-        """
-        Detect if a search result is behind a paywall.
-        This is a basic placeholder implementation.
-        """
-        paywall_keywords = ["subscribe", "premium", "for subscribers", "log in"]
-        snippet = result.snippet.lower()
-        if any(keyword in snippet for keyword in paywall_keywords):
-            return True, "Paywall detected based on snippet keywords."
-
-        known_paywall_domains = ["wsj.com", "ft.com", "theathletic.com"]
-        if any(domain in result.link for domain in known_paywall_domains):
-            return True, "Source is a known paywalled domain."
-
-        return False, ""
-
-    def _format_results(self, data: StructuredSearchResult) -> str:
-        """
-        Format the structured search results into a readable string.
-        """
-        if not data:
-            return "No structured data available."
-
-        formatted_string = f"Key Takeaways:\n" + "\n".join(f"- {takeaway}" for takeaway in data.key_takeaways)
-        formatted_string += "\n\nResults:\n"
-
-        for item in data.results:
-            formatted_string += f"Title: {item.title}\n"
-            formatted_string += f"Link: {item.link}\n"
-            formatted_string += f"Snippet: {item.snippet}\n"
-            if item.is_paywalled:
-                formatted_string += f"Paywall: {item.paywall_reason}\n"
-            formatted_string += "\n"
-
-        formatted_string += f"Related Topics:\n" + "\n".join(f"- {topic}" for topic in data.related_topics)
-        return formatted_string 
+            structured_data = result.data.model_dump()
+            self.agent_logger.debug(f"Successfully extracted structured data: {len(structured_data.get('content', ''))} chars")
+            
+            return structured_data
+            
+        except Exception as e:
+            self.agent_logger.error(f"Error extracting structured data: {str(e)}", e)
+            # Return empty dict on error, the caller will handle this gracefully
+            return {} 

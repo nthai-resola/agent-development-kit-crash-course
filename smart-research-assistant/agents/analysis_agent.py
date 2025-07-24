@@ -27,7 +27,10 @@ class AnalysisAgent(SpecializedAgent):
             name: The name of this agent.
         """
         super().__init__(model, name, agent_type="analysis")
-        self.analyzer = Agent(model=self.model)
+        self.analyzer = Agent(model=self.model, result_type=AnalysisResult)
+        self.translator = Agent(model=self.model, result_type=TranslationResult)
+        self.entity_extractor = Agent(model=self.model, result_type=EntityExtractionResult)
+        self.version_comparer = Agent(model=self.model, result_type=VersionComparisonResult)
 
     async def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """
@@ -44,9 +47,9 @@ class AnalysisAgent(SpecializedAgent):
             return await self._handle_version_comparison(query, context)
 
         try:
-            analysis_result = await self._analyze_data(query, context)
+            analysis_run_result = await self._analyze_data(query, context)
             
-            if not analysis_result:
+            if not analysis_run_result or not hasattr(analysis_run_result, 'data'):
                 return {
                     "success": False,
                     "content": "Failed to perform analysis.",
@@ -54,6 +57,7 @@ class AnalysisAgent(SpecializedAgent):
                     "metadata": {}
                 }
 
+            analysis_result = analysis_run_result.data
             if self._is_visualization_query(query):
                 chart_path = self._generate_chart(analysis_result)
                 analysis_result.visualization = chart_path
@@ -96,9 +100,11 @@ class AnalysisAgent(SpecializedAgent):
         Handle translation queries.
         """
         try:
-            translation_result = await self._translate_text(query, context)
-            if not translation_result:
+            translation_run_result = await self._translate_text(query, context)
+            if not translation_run_result or not hasattr(translation_run_result, 'data'):
                 return {"success": False, "content": "Failed to perform translation."}
+            
+            translation_result = translation_run_result.data
             return {"success": True, "content": self._format_translation_results(translation_result)}
         except Exception as e:
             logger.error(f"Error during translation: {e}")
@@ -109,9 +115,11 @@ class AnalysisAgent(SpecializedAgent):
         Handle entity extraction queries.
         """
         try:
-            extraction_result = await self._extract_entities(query, context)
-            if not extraction_result:
+            extraction_run_result = await self._extract_entities(query, context)
+            if not extraction_run_result or not hasattr(extraction_run_result, 'data'):
                 return {"success": False, "content": "Failed to extract entities."}
+            
+            extraction_result = extraction_run_result.data
             return {"success": True, "content": self._format_entity_extraction_results(extraction_result)}
         except Exception as e:
             logger.error(f"Error during entity extraction: {e}")
@@ -122,9 +130,11 @@ class AnalysisAgent(SpecializedAgent):
         Handle version comparison queries.
         """
         try:
-            comparison_result = await self._compare_versions(query, context)
-            if not comparison_result:
+            comparison_run_result = await self._compare_versions(query, context)
+            if not comparison_run_result or not hasattr(comparison_run_result, 'data'):
                 return {"success": False, "content": "Failed to perform version comparison."}
+            
+            comparison_result = comparison_run_result.data
             return {"success": True, "content": self._format_version_comparison_results(comparison_result)}
         except Exception as e:
             logger.error(f"Error during version comparison: {e}")
@@ -136,7 +146,8 @@ class AnalysisAgent(SpecializedAgent):
         """
         text_to_translate = context.get("other_agent_results", {}).get("search", {}).get("content", "")
         prompt = f"Translate the following text based on the query: '{query}'\n\nText: {text_to_translate}"
-        return await self.analyzer.run(input_text=prompt, pydantic_model=TranslationResult)
+        self.analyzer.result_type = TranslationResult
+        return await self.analyzer.run(prompt)
 
     async def _extract_entities(self, query: str, context: Dict[str, Any]) -> EntityExtractionResult:
         """
@@ -144,7 +155,8 @@ class AnalysisAgent(SpecializedAgent):
         """
         text_to_extract = context.get("other_agent_results", {}).get("search", {}).get("content", "")
         prompt = f"Extract entities from the following text based on the query: '{query}'\n\nText: {text_to_extract}"
-        return await self.analyzer.run(input_text=prompt, pydantic_model=EntityExtractionResult)
+        self.analyzer.result_type = EntityExtractionResult
+        return await self.analyzer.run(prompt)
 
     async def _compare_versions(self, query: str, context: Dict[str, Any]) -> VersionComparisonResult:
         """
@@ -169,7 +181,8 @@ class AnalysisAgent(SpecializedAgent):
         1. Identify what has been added, removed, or changed between the two versions.
         2. Provide a summary of the differences.
         """
-        return await self.analyzer.run(input_text=prompt, pydantic_model=VersionComparisonResult)
+        self.analyzer.result_type = VersionComparisonResult
+        return await self.analyzer.run(prompt)
 
     def _is_visualization_query(self, query: str) -> bool:
         """
@@ -219,10 +232,8 @@ class AnalysisAgent(SpecializedAgent):
         """
 
         try:
-            return await self.analyzer.run(
-                input_text=prompt,
-                pydantic_model=AnalysisResult
-            )
+            self.analyzer.result_type = AnalysisResult
+            return await self.analyzer.run(prompt)
         except (ValueError, ValidationError) as e:
             logger.error(f"Pydantic AI validation error during analysis: {e}")
             return None

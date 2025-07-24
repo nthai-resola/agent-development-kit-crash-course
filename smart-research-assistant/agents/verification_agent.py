@@ -26,7 +26,7 @@ class VerificationAgent(SpecializedAgent):
             name: The name of this agent.
         """
         super().__init__(model, name, agent_type="verification")
-        self.fact_checker = Agent(model=self.model)
+        self.fact_checker = Agent(model=self.model, result_type=VerificationResult)
 
     async def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """
@@ -36,15 +36,17 @@ class VerificationAgent(SpecializedAgent):
         context = context or {}
 
         try:
-            verification_result = await self._fact_check(query, context)
+            verification_run_result = await self._fact_check(query, context)
             
-            if not verification_result:
+            if not verification_run_result or not hasattr(verification_run_result, 'data'):
                 return {
                     "success": False,
                     "content": "Failed to perform verification.",
                     "confidence": 0.3,
                     "metadata": {}
                 }
+            
+            verification_result = verification_run_result.data
 
             return {
                 "success": True,
@@ -103,10 +105,7 @@ class VerificationAgent(SpecializedAgent):
         """
 
         try:
-            return await self.fact_checker.run(
-                input_text=prompt,
-                pydantic_model=VerificationResult
-            )
+            return await self.fact_checker.run(prompt)
         except (ValueError, ValidationError) as e:
             logger.error(f"Pydantic AI validation error during fact-checking: {e}")
             return None

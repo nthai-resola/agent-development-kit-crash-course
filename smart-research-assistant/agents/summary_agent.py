@@ -26,7 +26,8 @@ class SummaryAgent(SpecializedAgent):
             name: The name of this agent.
         """
         super().__init__(model, name, agent_type="summary")
-        self.summarizer = Agent(model=self.model)
+        self.summarizer = Agent(model=self.model, result_type=SummaryResult)
+        self.comparative_analyzer = Agent(model=self.model, result_type=ComparativeAnalysisResult)
 
     async def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """
@@ -39,9 +40,9 @@ class SummaryAgent(SpecializedAgent):
             return await self._handle_comparative_analysis(query, context)
 
         try:
-            summary_result = await self._summarize(query, context)
+            summary_run_result = await self._summarize(query, context)
             
-            if not summary_result:
+            if not summary_run_result or not hasattr(summary_run_result, 'data'):
                 return {
                     "success": False,
                     "content": "Failed to generate summary.",
@@ -49,6 +50,7 @@ class SummaryAgent(SpecializedAgent):
                     "metadata": {}
                 }
 
+            summary_result = summary_run_result.data
             return {
                 "success": True,
                 "content": self._format_results(summary_result),
@@ -76,14 +78,16 @@ class SummaryAgent(SpecializedAgent):
         Handle comparative analysis queries.
         """
         try:
-            analysis_result = await self._perform_comparative_analysis(query, context)
-            if not analysis_result:
+            analysis_run_result = await self._perform_comparative_analysis(query, context)
+            if not analysis_run_result or not hasattr(analysis_run_result, 'data'):
                 return {
                     "success": False,
                     "content": "Failed to perform comparative analysis.",
                     "confidence": 0.3,
                     "metadata": {}
                 }
+            
+            analysis_result = analysis_run_result.data
             return {
                 "success": True,
                 "content": self._format_comparison_results(analysis_result),
@@ -118,10 +122,7 @@ class SummaryAgent(SpecializedAgent):
         4. Generate a high-level summary of the analysis.
         """
         try:
-            return await self.summarizer.run(
-                input_text=prompt,
-                pydantic_model=ComparativeAnalysisResult
-            )
+            return await self.comparative_analyzer.run(prompt)
         except (ValueError, ValidationError) as e:
             logger.error(f"Pydantic AI validation error during comparative analysis: {e}")
             return None
@@ -147,10 +148,7 @@ class SummaryAgent(SpecializedAgent):
         """
 
         try:
-            return await self.summarizer.run(
-                input_text=prompt,
-                pydantic_model=SummaryResult
-            )
+            return await self.summarizer.run(prompt)
         except (ValueError, ValidationError) as e:
             logger.error(f"Pydantic AI validation error during summarization: {e}")
             return None

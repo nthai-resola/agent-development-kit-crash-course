@@ -383,3 +383,486 @@ pydantic_ai.exceptions.UserError: Unknown model: gpt-4
 2025-07-22 15:28:16,390 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520.json
 2025-07-22 15:28:16,391 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
 2025-07-22 15:28:16,392 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-24 09:09:12,833 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-24 09:09:13,841 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-24 09:09:13,841 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-24 09:09:13,841 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-24 09:09:13,841 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-24 09:09:13,841 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-24 09:09:13,845 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/6e3185d6-6085-403e-aafe-c45b26962cd7.json
+2025-07-24 09:09:13,847 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520.json
+2025-07-24 09:09:13,849 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/bc9efe37-8906-4fe1-b2e4-681562530867.json
+2025-07-24 09:09:13,850 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/066bc1e7-374f-4a15-9faf-4d6f020009b1.json
+2025-07-24 09:09:19,049 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520.json
+2025-07-24 09:09:19,049 - session_manager - INFO - Loaded session: e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520
+2025-07-24 09:10:18,410 - __main__ - INFO - Processing query: compare different between A2A Agent, Agentic Agent and MCP for a full comparation
+2025-07-24 09:10:18,410 - agents.orchestrator_agent - INFO - Processing query: compare different between A2A Agent, Agentic Agent and MCP for a full comparation...
+2025-07-24 09:10:18,410 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520.json
+2025-07-24 09:10:18,411 - agents.orchestrator_agent - INFO - Restored context for session e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520: 2 interactions, 0 findings
+2025-07-24 09:10:18,411 - agents.orchestrator_agent - INFO - Loaded research session: e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520
+2025-07-24 09:10:18,411 - agents.search_agent - INFO - SearchAgent processing query: compare different between A2A Agent, Agentic Agent and MCP for a full comparation...
+2025-07-24 09:10:18,411 - tools.search_tool - INFO - Performing google search for: compare different between A2A Agent, Agentic Agent and MCP for a full comparation...
+2025-07-24 09:10:18,411 - tools.search_tool - INFO - Sanitized query: compare different between A2A Agent, Agentic Agent and MCP for a full comparation
+2025-07-24 09:10:19,979 - tools.search_tool - INFO - Search returned 8 results
+2025-07-24 09:10:59,241 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:10:59,250 - agents.search_agent - INFO - Result type: <class 'pydantic_ai.result.RunResult'>
+2025-07-24 09:10:59,250 - agents.search_agent - INFO - Accessing result.data
+2025-07-24 09:10:59,253 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/e154a7fc-ebf1-4e4e-a2b1-5d97bb2aa520.json
+2025-07-24 09:42:46,237 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-24 09:42:46,237 - agent.orchestrator - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:42:46,238 - agent.search - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:42:47,042 - agent.search - INFO - Initialized search agent with model openai:gpt-4 and SerpAPI search tool
+2025-07-24 09:42:47,042 - agent.verification - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:42:47,044 - agent.summary - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:42:47,044 - agent.analysis - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:42:47,045 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-24 09:42:47,045 - agent.orchestrator - INFO - Registered SearchAgent for search tasks
+2025-07-24 09:42:47,046 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-24 09:42:47,046 - agent.orchestrator - INFO - Registered VerificationAgent for verification tasks
+2025-07-24 09:42:47,046 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-24 09:42:47,046 - agent.orchestrator - INFO - Registered SummaryAgent for summary tasks
+2025-07-24 09:42:47,047 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-24 09:42:47,047 - agent.orchestrator - INFO - Registered AnalysisAgent for analysis tasks
+2025-07-24 09:42:47,048 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-24 09:42:47,052 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/d5ec3e25-3107-4ad9-a844-ec7f9e222ec0.json
+2025-07-24 09:42:47,052 - session_manager - INFO - Created new session: d5ec3e25-3107-4ad9-a844-ec7f9e222ec0
+2025-07-24 09:42:47,052 - __main__ - INFO - Started new research session: d5ec3e25-3107-4ad9-a844-ec7f9e222ec0
+2025-07-24 09:42:47,056 - __main__ - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 09:42:47,056 - agents.orchestrator_agent - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:42:47,059 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/d5ec3e25-3107-4ad9-a844-ec7f9e222ec0.json
+2025-07-24 09:42:47,059 - agents.orchestrator_agent - INFO - Restored context for session d5ec3e25-3107-4ad9-a844-ec7f9e222ec0: 0 interactions, 0 findings
+2025-07-24 09:42:47,059 - agents.orchestrator_agent - INFO - Loaded research session: d5ec3e25-3107-4ad9-a844-ec7f9e222ec0
+2025-07-24 09:42:47,059 - agent.orchestrator - INFO - Starting: analyze query requirements for 'analyze and summarize the late...'
+2025-07-24 09:42:47,060 - agent.orchestrator - INFO - Using processing mode: full-processing
+2025-07-24 09:42:47,060 - agent.orchestrator - INFO - Decision: selected agents: search, verification, summary, analysis (Reason: Using full-processing mode - selected all 4 agents)
+2025-07-24 09:42:47,061 - agent.orchestrator - INFO - Completed: analyze query requirements
+2025-07-24 09:42:47,061 - agent.orchestrator - INFO - Starting: coordinate 4 agent(s)
+2025-07-24 09:42:47,061 - agent.orchestrator - INFO - Execution order: search → verification → analysis → summary
+2025-07-24 09:42:47,062 - agent.orchestrator - INFO - Delegating to search agent
+2025-07-24 09:42:47,063 - agent.search - INFO - Starting: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 09:42:47,063 - agent.search - INFO - Executing web search
+2025-07-24 09:42:47,064 - agent.tool - INFO - Searching for: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 09:42:51,494 - agent.tool - INFO - Received 10 results from search API
+2025-07-24 09:42:51,495 - agent.search - INFO - Extracting structured data from search results
+2025-07-24 09:42:51,497 - agent.search - ERROR - Error extracting structured data: 'Agent' object has no attribute 'extract'
+Traceback (most recent call last):
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/agents/search_agent.py", line 185, in _extract_structured_data
+    result = await self.structured_data_extractor.extract(SearchSummary, prompt)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Agent' object has no attribute 'extract'
+2025-07-24 09:42:51,501 - agent.search - INFO - Using raw search results as fallback
+2025-07-24 09:42:51,502 - agent.search - INFO - Completed: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 09:42:51,502 - agent.orchestrator - INFO - search agent completed successfully: Here's what I found in my search:
+
+1. Top 11 New T...
+2025-07-24 09:42:51,503 - agent.orchestrator - INFO - Delegating to verification agent
+2025-07-24 09:42:51,503 - agents.verification_agent - INFO - VerificationAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:42:51,503 - agents.verification_agent - ERROR - Error during verification: Agent.run() got an unexpected keyword argument 'input_text'
+2025-07-24 09:42:51,503 - agent.orchestrator - ERROR - verification agent failed: Unknown error
+2025-07-24 09:42:51,504 - agent.orchestrator - INFO - Delegating to analysis agent
+2025-07-24 09:42:51,504 - agents.analysis_agent - INFO - AnalysisAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:42:51,504 - agents.analysis_agent - ERROR - Error during analysis: Agent.run() got an unexpected keyword argument 'input_text'
+2025-07-24 09:42:51,504 - agent.orchestrator - ERROR - analysis agent failed: Unknown error
+2025-07-24 09:42:51,505 - agent.orchestrator - INFO - Delegating to summary agent
+2025-07-24 09:42:51,505 - agents.summary_agent - INFO - SummaryAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:42:51,505 - agents.summary_agent - ERROR - Error during summarization: Agent.run() got an unexpected keyword argument 'input_text'
+2025-07-24 09:42:51,505 - agent.orchestrator - ERROR - summary agent failed: Unknown error
+2025-07-24 09:42:51,506 - agents.orchestrator_agent - INFO - Compensating for failed agents: ['verification', 'summary', 'analysis']
+2025-07-24 09:42:51,506 - agent.orchestrator - INFO - Compensating for failed agents: verification, summary, analysis
+2025-07-24 09:42:51,506 - agent.orchestrator - INFO - Added unverified results disclaimer for failed verification
+2025-07-24 09:42:51,507 - agent.orchestrator - INFO - Decision: compensated for failed verification agent
+2025-07-24 09:42:51,507 - agent.orchestrator - INFO - Added basic key points note for failed summary
+2025-07-24 09:42:51,507 - agent.orchestrator - INFO - Decision: compensated for failed summary agent
+2025-07-24 09:42:51,508 - agent.orchestrator - INFO - Added manual analysis suggestion for failed analysis
+2025-07-24 09:42:51,508 - agent.orchestrator - INFO - Decision: compensated for failed analysis agent
+2025-07-24 09:42:51,509 - agent.orchestrator - INFO - Completed: coordinate agents
+2025-07-24 09:42:51,513 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/d5ec3e25-3107-4ad9-a844-ec7f9e222ec0.json
+2025-07-24 09:44:30,501 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-24 09:44:30,502 - agent.orchestrator - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:44:30,502 - agent.search - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:44:31,335 - agent.search - INFO - Initialized search agent with model openai:gpt-4 and SerpAPI search tool
+2025-07-24 09:44:31,335 - agent.verification - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:44:31,337 - agent.summary - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:44:31,337 - agent.analysis - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:44:31,338 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-24 09:44:31,338 - agent.orchestrator - INFO - Registered SearchAgent for search tasks
+2025-07-24 09:44:31,339 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-24 09:44:31,339 - agent.orchestrator - INFO - Registered VerificationAgent for verification tasks
+2025-07-24 09:44:31,339 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-24 09:44:31,339 - agent.orchestrator - INFO - Registered SummaryAgent for summary tasks
+2025-07-24 09:44:31,339 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-24 09:44:31,339 - agent.orchestrator - INFO - Registered AnalysisAgent for analysis tasks
+2025-07-24 09:44:31,340 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-24 09:44:31,343 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/3aea4f59-be0c-4973-88f7-2e3403cd3db8.json
+2025-07-24 09:44:31,343 - session_manager - INFO - Created new session: 3aea4f59-be0c-4973-88f7-2e3403cd3db8
+2025-07-24 09:44:31,343 - __main__ - INFO - Started new research session: 3aea4f59-be0c-4973-88f7-2e3403cd3db8
+2025-07-24 09:44:31,347 - __main__ - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 09:44:31,348 - agents.orchestrator_agent - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:44:31,349 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/3aea4f59-be0c-4973-88f7-2e3403cd3db8.json
+2025-07-24 09:44:31,350 - agents.orchestrator_agent - INFO - Restored context for session 3aea4f59-be0c-4973-88f7-2e3403cd3db8: 0 interactions, 0 findings
+2025-07-24 09:44:31,350 - agents.orchestrator_agent - INFO - Loaded research session: 3aea4f59-be0c-4973-88f7-2e3403cd3db8
+2025-07-24 09:44:31,350 - agent.orchestrator - INFO - Starting: analyze query requirements for 'analyze and summarize the late...'
+2025-07-24 09:44:31,351 - agent.orchestrator - INFO - Using processing mode: full-processing
+2025-07-24 09:44:31,351 - agent.orchestrator - INFO - Decision: selected agents: search, verification, summary, analysis (Reason: Using full-processing mode - selected all 4 agents)
+2025-07-24 09:44:31,352 - agent.orchestrator - INFO - Completed: analyze query requirements
+2025-07-24 09:44:31,352 - agent.orchestrator - INFO - Starting: coordinate 4 agent(s)
+2025-07-24 09:44:31,353 - agent.orchestrator - INFO - Execution order: search → verification → analysis → summary
+2025-07-24 09:44:31,353 - agent.orchestrator - INFO - Delegating to search agent
+2025-07-24 09:44:31,354 - agent.search - INFO - Starting: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 09:44:31,354 - agent.search - INFO - Executing web search
+2025-07-24 09:44:31,355 - agent.tool - INFO - Searching for: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 09:44:31,524 - agent.tool - INFO - Received 10 results from search API
+2025-07-24 09:44:31,524 - agent.search - INFO - Extracting structured data from search results
+2025-07-24 09:44:31,526 - agent.search - ERROR - Error extracting structured data: 'Agent' object has no attribute 'extract'
+Traceback (most recent call last):
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/agents/search_agent.py", line 185, in _extract_structured_data
+    result = await self.structured_data_extractor.extract(SearchSummary, prompt)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Agent' object has no attribute 'extract'
+2025-07-24 09:44:31,528 - agent.search - INFO - Using raw search results as fallback
+2025-07-24 09:44:31,529 - agent.search - INFO - Completed: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 09:44:31,529 - agent.orchestrator - INFO - search agent completed successfully: Here's what I found in my search:
+
+1. Top 11 New T...
+2025-07-24 09:44:31,530 - agent.orchestrator - INFO - Delegating to verification agent
+2025-07-24 09:44:31,530 - agents.verification_agent - INFO - VerificationAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:44:31,530 - agents.verification_agent - ERROR - Error during verification: Agent.run() got an unexpected keyword argument 'pydantic_model'
+2025-07-24 09:44:31,530 - agent.orchestrator - ERROR - verification agent failed: Unknown error
+2025-07-24 09:44:31,531 - agent.orchestrator - INFO - Delegating to analysis agent
+2025-07-24 09:44:31,531 - agents.analysis_agent - INFO - AnalysisAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:44:31,532 - agents.analysis_agent - ERROR - Error during analysis: Agent.run() got an unexpected keyword argument 'pydantic_model'
+2025-07-24 09:44:31,532 - agent.orchestrator - ERROR - analysis agent failed: Unknown error
+2025-07-24 09:44:31,532 - agent.orchestrator - INFO - Delegating to summary agent
+2025-07-24 09:44:31,532 - agents.summary_agent - INFO - SummaryAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:44:31,533 - agents.summary_agent - ERROR - Error during summarization: Agent.run() got an unexpected keyword argument 'pydantic_model'
+2025-07-24 09:44:31,533 - agent.orchestrator - ERROR - summary agent failed: Unknown error
+2025-07-24 09:44:31,533 - agents.orchestrator_agent - INFO - Compensating for failed agents: ['verification', 'summary', 'analysis']
+2025-07-24 09:44:31,533 - agent.orchestrator - INFO - Compensating for failed agents: verification, summary, analysis
+2025-07-24 09:44:31,534 - agent.orchestrator - INFO - Added unverified results disclaimer for failed verification
+2025-07-24 09:44:31,534 - agent.orchestrator - INFO - Decision: compensated for failed verification agent
+2025-07-24 09:44:31,535 - agent.orchestrator - INFO - Added basic key points note for failed summary
+2025-07-24 09:44:31,535 - agent.orchestrator - INFO - Decision: compensated for failed summary agent
+2025-07-24 09:44:31,535 - agent.orchestrator - INFO - Added manual analysis suggestion for failed analysis
+2025-07-24 09:44:31,536 - agent.orchestrator - INFO - Decision: compensated for failed analysis agent
+2025-07-24 09:44:31,536 - agent.orchestrator - INFO - Completed: coordinate agents
+2025-07-24 09:44:31,538 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/3aea4f59-be0c-4973-88f7-2e3403cd3db8.json
+2025-07-24 09:45:20,182 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-24 09:45:20,182 - agent.orchestrator - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:45:20,183 - agent.search - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:45:20,960 - agent.search - INFO - Initialized search agent with model openai:gpt-4 and SerpAPI search tool
+2025-07-24 09:45:20,960 - agent.verification - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:45:20,965 - agent.summary - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:45:20,966 - agent.analysis - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:45:20,967 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-24 09:45:20,967 - agent.orchestrator - INFO - Registered SearchAgent for search tasks
+2025-07-24 09:45:20,967 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-24 09:45:20,968 - agent.orchestrator - INFO - Registered VerificationAgent for verification tasks
+2025-07-24 09:45:20,968 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-24 09:45:20,968 - agent.orchestrator - INFO - Registered SummaryAgent for summary tasks
+2025-07-24 09:45:20,969 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-24 09:45:20,969 - agent.orchestrator - INFO - Registered AnalysisAgent for analysis tasks
+2025-07-24 09:45:20,969 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-24 09:45:20,971 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/98353af4-541d-4f7b-8b6b-da6273939d9d.json
+2025-07-24 09:45:20,971 - session_manager - INFO - Created new session: 98353af4-541d-4f7b-8b6b-da6273939d9d
+2025-07-24 09:45:20,971 - __main__ - INFO - Started new research session: 98353af4-541d-4f7b-8b6b-da6273939d9d
+2025-07-24 09:45:20,975 - __main__ - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 09:45:20,975 - agents.orchestrator_agent - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:45:20,976 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/98353af4-541d-4f7b-8b6b-da6273939d9d.json
+2025-07-24 09:45:20,976 - agents.orchestrator_agent - INFO - Restored context for session 98353af4-541d-4f7b-8b6b-da6273939d9d: 0 interactions, 0 findings
+2025-07-24 09:45:20,976 - agents.orchestrator_agent - INFO - Loaded research session: 98353af4-541d-4f7b-8b6b-da6273939d9d
+2025-07-24 09:45:20,976 - agent.orchestrator - INFO - Starting: analyze query requirements for 'analyze and summarize the late...'
+2025-07-24 09:45:20,977 - agent.orchestrator - INFO - Using processing mode: full-processing
+2025-07-24 09:45:20,977 - agent.orchestrator - INFO - Decision: selected agents: search, verification, summary, analysis (Reason: Using full-processing mode - selected all 4 agents)
+2025-07-24 09:45:20,978 - agent.orchestrator - INFO - Completed: analyze query requirements
+2025-07-24 09:45:20,978 - agent.orchestrator - INFO - Starting: coordinate 4 agent(s)
+2025-07-24 09:45:20,978 - agent.orchestrator - INFO - Execution order: search → verification → analysis → summary
+2025-07-24 09:45:20,979 - agent.orchestrator - INFO - Delegating to search agent
+2025-07-24 09:45:20,979 - agent.search - INFO - Starting: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 09:45:20,980 - agent.search - INFO - Executing web search
+2025-07-24 09:45:20,981 - agent.tool - INFO - Searching for: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 09:45:21,233 - agent.tool - INFO - Received 10 results from search API
+2025-07-24 09:45:21,234 - agent.search - INFO - Extracting structured data from search results
+2025-07-24 09:45:21,236 - agent.search - ERROR - Error extracting structured data: 'Agent' object has no attribute 'extract'
+Traceback (most recent call last):
+  File "/Users/thainguyen/Documents/Resola/refs/agent-development-kit-crash-course/smart-research-assistant/agents/search_agent.py", line 185, in _extract_structured_data
+    result = await self.structured_data_extractor.extract(SearchSummary, prompt)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Agent' object has no attribute 'extract'
+2025-07-24 09:45:21,238 - agent.search - INFO - Using raw search results as fallback
+2025-07-24 09:45:21,238 - agent.search - INFO - Completed: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 09:45:21,239 - agent.orchestrator - INFO - search agent completed successfully: Here's what I found in my search:
+
+1. Top 11 New T...
+2025-07-24 09:45:21,240 - agent.orchestrator - INFO - Delegating to verification agent
+2025-07-24 09:45:21,240 - agents.verification_agent - INFO - VerificationAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:45:21,240 - agents.verification_agent - ERROR - Error during verification: Agent.run() got an unexpected keyword argument 'pydantic_model'
+2025-07-24 09:45:21,240 - agent.orchestrator - ERROR - verification agent failed: Unknown error
+2025-07-24 09:45:21,241 - agent.orchestrator - INFO - Delegating to analysis agent
+2025-07-24 09:45:21,241 - agents.analysis_agent - INFO - AnalysisAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:45:33,978 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:45:33,986 - agents.analysis_agent - ERROR - Error during analysis: 'RunResult' object has no attribute 'query'
+2025-07-24 09:45:33,987 - agent.orchestrator - ERROR - analysis agent failed: Unknown error
+2025-07-24 09:45:33,987 - agent.orchestrator - INFO - Delegating to summary agent
+2025-07-24 09:45:33,987 - agents.summary_agent - INFO - SummaryAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:45:44,963 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:45:44,968 - agents.summary_agent - ERROR - Error during summarization: 'RunResult' object has no attribute 'query'
+2025-07-24 09:45:44,968 - agent.orchestrator - ERROR - summary agent failed: Unknown error
+2025-07-24 09:45:44,969 - agents.orchestrator_agent - INFO - Compensating for failed agents: ['verification', 'summary', 'analysis']
+2025-07-24 09:45:44,969 - agent.orchestrator - INFO - Compensating for failed agents: verification, summary, analysis
+2025-07-24 09:45:44,969 - agent.orchestrator - INFO - Added unverified results disclaimer for failed verification
+2025-07-24 09:45:44,970 - agent.orchestrator - INFO - Decision: compensated for failed verification agent
+2025-07-24 09:45:44,970 - agent.orchestrator - INFO - Added basic key points note for failed summary
+2025-07-24 09:45:44,970 - agent.orchestrator - INFO - Decision: compensated for failed summary agent
+2025-07-24 09:45:44,971 - agent.orchestrator - INFO - Added manual analysis suggestion for failed analysis
+2025-07-24 09:45:44,971 - agent.orchestrator - INFO - Decision: compensated for failed analysis agent
+2025-07-24 09:45:44,972 - agent.orchestrator - INFO - Completed: coordinate agents
+2025-07-24 09:45:44,973 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/98353af4-541d-4f7b-8b6b-da6273939d9d.json
+2025-07-24 09:46:10,428 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-24 09:46:10,428 - agent.orchestrator - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:46:10,429 - agent.search - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:46:11,174 - agent.search - INFO - Initialized search agent with model openai:gpt-4 and SerpAPI search tool
+2025-07-24 09:46:11,176 - agent.verification - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:46:11,179 - agent.summary - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:46:11,181 - agent.analysis - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:46:11,183 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-24 09:46:11,183 - agent.orchestrator - INFO - Registered SearchAgent for search tasks
+2025-07-24 09:46:11,183 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-24 09:46:11,184 - agent.orchestrator - INFO - Registered VerificationAgent for verification tasks
+2025-07-24 09:46:11,184 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-24 09:46:11,184 - agent.orchestrator - INFO - Registered SummaryAgent for summary tasks
+2025-07-24 09:46:11,185 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-24 09:46:11,185 - agent.orchestrator - INFO - Registered AnalysisAgent for analysis tasks
+2025-07-24 09:46:11,186 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-24 09:46:11,189 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/a8f2c4b2-687d-48bc-a140-96bd6b94d0b6.json
+2025-07-24 09:46:11,189 - session_manager - INFO - Created new session: a8f2c4b2-687d-48bc-a140-96bd6b94d0b6
+2025-07-24 09:46:11,189 - __main__ - INFO - Started new research session: a8f2c4b2-687d-48bc-a140-96bd6b94d0b6
+2025-07-24 09:46:11,194 - __main__ - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 09:46:11,195 - agents.orchestrator_agent - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:46:11,195 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/a8f2c4b2-687d-48bc-a140-96bd6b94d0b6.json
+2025-07-24 09:46:11,196 - agents.orchestrator_agent - INFO - Restored context for session a8f2c4b2-687d-48bc-a140-96bd6b94d0b6: 0 interactions, 0 findings
+2025-07-24 09:46:11,196 - agents.orchestrator_agent - INFO - Loaded research session: a8f2c4b2-687d-48bc-a140-96bd6b94d0b6
+2025-07-24 09:46:11,196 - agent.orchestrator - INFO - Starting: analyze query requirements for 'analyze and summarize the late...'
+2025-07-24 09:46:11,196 - agent.orchestrator - INFO - Using processing mode: full-processing
+2025-07-24 09:46:11,197 - agent.orchestrator - INFO - Decision: selected agents: search, verification, summary, analysis (Reason: Using full-processing mode - selected all 4 agents)
+2025-07-24 09:46:11,198 - agent.orchestrator - INFO - Completed: analyze query requirements
+2025-07-24 09:46:11,198 - agent.orchestrator - INFO - Starting: coordinate 4 agent(s)
+2025-07-24 09:46:11,199 - agent.orchestrator - INFO - Execution order: search → verification → analysis → summary
+2025-07-24 09:46:11,199 - agent.orchestrator - INFO - Delegating to search agent
+2025-07-24 09:46:11,200 - agent.search - INFO - Starting: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 09:46:11,200 - agent.search - INFO - Executing web search
+2025-07-24 09:46:11,201 - agent.tool - INFO - Searching for: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 09:46:11,547 - agent.tool - INFO - Received 10 results from search API
+2025-07-24 09:46:11,548 - agent.search - INFO - Extracting structured data from search results
+2025-07-24 09:46:28,420 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:46:28,430 - agent.search - INFO - Extracted 6 sources
+2025-07-24 09:46:28,430 - agent.search - INFO - Extracted content: 574 characters
+2025-07-24 09:46:28,431 - agent.search - INFO - Completed: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 09:46:28,431 - agent.orchestrator - INFO - search agent completed successfully: The latest advancements in AI include major progre...
+2025-07-24 09:46:28,432 - agent.orchestrator - INFO - Delegating to verification agent
+2025-07-24 09:46:28,432 - agents.verification_agent - INFO - VerificationAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:46:28,432 - agents.verification_agent - ERROR - Error during verification: Agent.run() got an unexpected keyword argument 'pydantic_model'
+2025-07-24 09:46:28,432 - agent.orchestrator - ERROR - verification agent failed: Unknown error
+2025-07-24 09:46:28,433 - agent.orchestrator - INFO - Delegating to analysis agent
+2025-07-24 09:46:28,433 - agents.analysis_agent - INFO - AnalysisAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:46:47,430 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:46:47,436 - agents.analysis_agent - ERROR - Error during analysis: 'RunResult' object has no attribute 'query'
+2025-07-24 09:46:47,436 - agent.orchestrator - ERROR - analysis agent failed: Unknown error
+2025-07-24 09:46:47,437 - agent.orchestrator - INFO - Delegating to summary agent
+2025-07-24 09:46:47,437 - agents.summary_agent - INFO - SummaryAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:47:01,494 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:47:01,496 - agents.summary_agent - ERROR - Error during summarization: 'RunResult' object has no attribute 'query'
+2025-07-24 09:47:01,496 - agent.orchestrator - ERROR - summary agent failed: Unknown error
+2025-07-24 09:47:01,497 - agents.orchestrator_agent - INFO - Compensating for failed agents: ['verification', 'summary', 'analysis']
+2025-07-24 09:47:01,497 - agent.orchestrator - INFO - Compensating for failed agents: verification, summary, analysis
+2025-07-24 09:47:01,497 - agent.orchestrator - INFO - Added unverified results disclaimer for failed verification
+2025-07-24 09:47:01,498 - agent.orchestrator - INFO - Decision: compensated for failed verification agent
+2025-07-24 09:47:01,498 - agent.orchestrator - INFO - Added basic key points note for failed summary
+2025-07-24 09:47:01,499 - agent.orchestrator - INFO - Decision: compensated for failed summary agent
+2025-07-24 09:47:01,499 - agent.orchestrator - INFO - Added manual analysis suggestion for failed analysis
+2025-07-24 09:47:01,500 - agent.orchestrator - INFO - Decision: compensated for failed analysis agent
+2025-07-24 09:47:01,500 - agent.orchestrator - INFO - Completed: coordinate agents
+2025-07-24 09:47:01,502 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/a8f2c4b2-687d-48bc-a140-96bd6b94d0b6.json
+2025-07-24 09:47:50,505 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-24 09:47:50,505 - agent.orchestrator - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:47:50,506 - agent.search - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:47:51,280 - agent.search - INFO - Initialized search agent with model openai:gpt-4 and SerpAPI search tool
+2025-07-24 09:47:51,280 - agent.verification - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:47:51,282 - agent.summary - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:47:51,283 - agent.analysis - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:47:51,284 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-24 09:47:51,284 - agent.orchestrator - INFO - Registered SearchAgent for search tasks
+2025-07-24 09:47:51,285 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-24 09:47:51,285 - agent.orchestrator - INFO - Registered VerificationAgent for verification tasks
+2025-07-24 09:47:51,285 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-24 09:47:51,285 - agent.orchestrator - INFO - Registered SummaryAgent for summary tasks
+2025-07-24 09:47:51,286 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-24 09:47:51,286 - agent.orchestrator - INFO - Registered AnalysisAgent for analysis tasks
+2025-07-24 09:47:51,286 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-24 09:47:51,288 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/05e246df-e8dd-4cd2-8e2c-ad00f86f4e6a.json
+2025-07-24 09:47:51,288 - session_manager - INFO - Created new session: 05e246df-e8dd-4cd2-8e2c-ad00f86f4e6a
+2025-07-24 09:47:51,288 - __main__ - INFO - Started new research session: 05e246df-e8dd-4cd2-8e2c-ad00f86f4e6a
+2025-07-24 09:47:51,292 - __main__ - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 09:47:51,292 - agents.orchestrator_agent - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:47:51,293 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/05e246df-e8dd-4cd2-8e2c-ad00f86f4e6a.json
+2025-07-24 09:47:51,293 - agents.orchestrator_agent - INFO - Restored context for session 05e246df-e8dd-4cd2-8e2c-ad00f86f4e6a: 0 interactions, 0 findings
+2025-07-24 09:47:51,293 - agents.orchestrator_agent - INFO - Loaded research session: 05e246df-e8dd-4cd2-8e2c-ad00f86f4e6a
+2025-07-24 09:47:51,293 - agent.orchestrator - INFO - Starting: analyze query requirements for 'analyze and summarize the late...'
+2025-07-24 09:47:51,293 - agent.orchestrator - INFO - Using processing mode: full-processing
+2025-07-24 09:47:51,294 - agent.orchestrator - INFO - Decision: selected agents: search, verification, summary, analysis (Reason: Using full-processing mode - selected all 4 agents)
+2025-07-24 09:47:51,294 - agent.orchestrator - INFO - Completed: analyze query requirements
+2025-07-24 09:47:51,295 - agent.orchestrator - INFO - Starting: coordinate 4 agent(s)
+2025-07-24 09:47:51,295 - agent.orchestrator - INFO - Execution order: search → verification → analysis → summary
+2025-07-24 09:47:51,295 - agent.orchestrator - INFO - Delegating to search agent
+2025-07-24 09:47:51,296 - agent.search - INFO - Starting: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 09:47:51,296 - agent.search - INFO - Executing web search
+2025-07-24 09:47:51,297 - agent.tool - INFO - Searching for: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 09:47:51,439 - agent.tool - INFO - Received 10 results from search API
+2025-07-24 09:47:51,440 - agent.search - INFO - Extracting structured data from search results
+2025-07-24 09:48:05,066 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:48:05,077 - agent.search - INFO - Extracted 5 sources
+2025-07-24 09:48:05,077 - agent.search - INFO - Extracted content: 675 characters
+2025-07-24 09:48:05,078 - agent.search - INFO - Completed: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 09:48:05,078 - agent.orchestrator - INFO - search agent completed successfully: Advancements in AI have been significant with rese...
+2025-07-24 09:48:05,079 - agent.orchestrator - INFO - Delegating to verification agent
+2025-07-24 09:48:05,079 - agents.verification_agent - INFO - VerificationAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:48:33,633 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:48:33,643 - agents.verification_agent - ERROR - Error during verification: 'RunResult' object has no attribute 'query'
+2025-07-24 09:48:33,643 - agent.orchestrator - ERROR - verification agent failed: Unknown error
+2025-07-24 09:48:33,644 - agent.orchestrator - INFO - Delegating to analysis agent
+2025-07-24 09:48:33,645 - agents.analysis_agent - INFO - AnalysisAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:48:52,478 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:48:52,482 - agents.analysis_agent - ERROR - Error during analysis: 'RunResult' object has no attribute 'query'
+2025-07-24 09:48:52,482 - agent.orchestrator - ERROR - analysis agent failed: Unknown error
+2025-07-24 09:48:52,482 - agent.orchestrator - INFO - Delegating to summary agent
+2025-07-24 09:48:52,483 - agents.summary_agent - INFO - SummaryAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:49:02,220 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:49:02,227 - agents.summary_agent - ERROR - Error during summarization: 'RunResult' object has no attribute 'query'
+2025-07-24 09:49:02,227 - agent.orchestrator - ERROR - summary agent failed: Unknown error
+2025-07-24 09:49:02,228 - agents.orchestrator_agent - INFO - Compensating for failed agents: ['verification', 'summary', 'analysis']
+2025-07-24 09:49:02,228 - agent.orchestrator - INFO - Compensating for failed agents: verification, summary, analysis
+2025-07-24 09:49:02,228 - agent.orchestrator - INFO - Added unverified results disclaimer for failed verification
+2025-07-24 09:49:02,228 - agent.orchestrator - INFO - Decision: compensated for failed verification agent
+2025-07-24 09:49:02,229 - agent.orchestrator - INFO - Added basic key points note for failed summary
+2025-07-24 09:49:02,229 - agent.orchestrator - INFO - Decision: compensated for failed summary agent
+2025-07-24 09:49:02,230 - agent.orchestrator - INFO - Added manual analysis suggestion for failed analysis
+2025-07-24 09:49:02,230 - agent.orchestrator - INFO - Decision: compensated for failed analysis agent
+2025-07-24 09:49:02,230 - agent.orchestrator - INFO - Completed: coordinate agents
+2025-07-24 09:49:02,232 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/05e246df-e8dd-4cd2-8e2c-ad00f86f4e6a.json
+2025-07-24 09:57:55,096 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-24 09:57:55,097 - agent.orchestrator - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:57:55,097 - agent.search - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:57:56,059 - agent.search - INFO - Initialized search agent with model openai:gpt-4 and SerpAPI search tool
+2025-07-24 09:57:56,061 - agent.verification - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:57:56,063 - agent.summary - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:57:56,064 - agent.analysis - INFO - Initialized with model: openai:gpt-4
+2025-07-24 09:57:56,065 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-24 09:57:56,065 - agent.orchestrator - INFO - Registered SearchAgent for search tasks
+2025-07-24 09:57:56,066 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-24 09:57:56,066 - agent.orchestrator - INFO - Registered VerificationAgent for verification tasks
+2025-07-24 09:57:56,066 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-24 09:57:56,066 - agent.orchestrator - INFO - Registered SummaryAgent for summary tasks
+2025-07-24 09:57:56,066 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-24 09:57:56,067 - agent.orchestrator - INFO - Registered AnalysisAgent for analysis tasks
+2025-07-24 09:57:56,067 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-24 09:57:56,070 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/a3cda209-13be-4b6c-83cc-6191864ee138.json
+2025-07-24 09:57:56,070 - session_manager - INFO - Created new session: a3cda209-13be-4b6c-83cc-6191864ee138
+2025-07-24 09:57:56,070 - __main__ - INFO - Started new research session: a3cda209-13be-4b6c-83cc-6191864ee138
+2025-07-24 09:57:56,076 - __main__ - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 09:57:56,077 - agents.orchestrator_agent - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:57:56,078 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/a3cda209-13be-4b6c-83cc-6191864ee138.json
+2025-07-24 09:57:56,079 - agents.orchestrator_agent - INFO - Restored context for session a3cda209-13be-4b6c-83cc-6191864ee138: 0 interactions, 0 findings
+2025-07-24 09:57:56,079 - agents.orchestrator_agent - INFO - Loaded research session: a3cda209-13be-4b6c-83cc-6191864ee138
+2025-07-24 09:57:56,079 - agent.orchestrator - INFO - Starting: analyze query requirements for 'analyze and summarize the late...'
+2025-07-24 09:57:56,080 - agent.orchestrator - INFO - Using processing mode: full-processing
+2025-07-24 09:57:56,080 - agent.orchestrator - INFO - Decision: selected agents: search, verification, summary, analysis (Reason: Using full-processing mode - selected all 4 agents)
+2025-07-24 09:57:56,081 - agent.orchestrator - INFO - Completed: analyze query requirements
+2025-07-24 09:57:56,081 - agent.orchestrator - INFO - Starting: coordinate 4 agent(s)
+2025-07-24 09:57:56,081 - agent.orchestrator - INFO - Execution order: search → verification → analysis → summary
+2025-07-24 09:57:56,082 - agent.orchestrator - INFO - Delegating to search agent
+2025-07-24 09:57:56,082 - agent.search - INFO - Starting: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 09:57:56,083 - agent.search - INFO - Executing web search
+2025-07-24 09:57:56,083 - agent.tool - INFO - Searching for: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 09:57:56,404 - agent.tool - INFO - Received 10 results from search API
+2025-07-24 09:57:56,404 - agent.search - INFO - Extracting structured data from search results
+2025-07-24 09:58:12,767 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:58:12,777 - agent.search - INFO - Extracted 5 sources
+2025-07-24 09:58:12,778 - agent.search - INFO - Extracted content: 777 characters
+2025-07-24 09:58:12,778 - agent.search - INFO - Completed: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 09:58:12,779 - agent.orchestrator - INFO - search agent completed successfully: The latest advancements in AI cover a wide range o...
+2025-07-24 09:58:12,779 - agent.orchestrator - INFO - Delegating to verification agent
+2025-07-24 09:58:12,779 - agents.verification_agent - INFO - VerificationAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:58:45,239 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:58:45,260 - agent.orchestrator - INFO - verification agent completed successfully: Verification for 'analyze and summarize the latest...
+2025-07-24 09:58:45,261 - agent.orchestrator - INFO - Delegating to analysis agent
+2025-07-24 09:58:45,262 - agents.analysis_agent - INFO - AnalysisAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:59:05,924 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:59:05,929 - agents.analysis_agent - ERROR - Error during analysis: 'str' object has no attribute 'query'
+2025-07-24 09:59:05,932 - agent.orchestrator - ERROR - analysis agent failed: Unknown error
+2025-07-24 09:59:05,932 - agent.orchestrator - INFO - Delegating to summary agent
+2025-07-24 09:59:05,934 - agents.summary_agent - INFO - SummaryAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 09:59:19,163 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 09:59:19,169 - agents.summary_agent - ERROR - Error during summarization: 'str' object has no attribute 'query'
+2025-07-24 09:59:19,169 - agent.orchestrator - ERROR - summary agent failed: Unknown error
+2025-07-24 09:59:19,169 - agents.orchestrator_agent - INFO - Compensating for failed agents: ['summary', 'analysis']
+2025-07-24 09:59:19,170 - agent.orchestrator - INFO - Compensating for failed agents: summary, analysis
+2025-07-24 09:59:19,170 - agent.orchestrator - INFO - Added basic key points note for failed summary
+2025-07-24 09:59:19,171 - agent.orchestrator - INFO - Decision: compensated for failed summary agent
+2025-07-24 09:59:19,171 - agent.orchestrator - INFO - Added manual analysis suggestion for failed analysis
+2025-07-24 09:59:19,171 - agent.orchestrator - INFO - Decision: compensated for failed analysis agent
+2025-07-24 09:59:19,172 - agent.orchestrator - INFO - Completed: coordinate agents
+2025-07-24 09:59:19,178 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/a3cda209-13be-4b6c-83cc-6191864ee138.json
+2025-07-24 10:11:50,042 - agents.orchestrator_agent - INFO - Orchestrator Agent initialized with model: openai:gpt-4
+2025-07-24 10:11:50,043 - agent.orchestrator - INFO - Initialized with model: openai:gpt-4
+2025-07-24 10:11:50,043 - agent.search - INFO - Initialized with model: openai:gpt-4
+2025-07-24 10:11:50,969 - agent.search - INFO - Initialized search agent with model openai:gpt-4 and SerpAPI search tool
+2025-07-24 10:11:50,970 - agent.verification - INFO - Initialized with model: openai:gpt-4
+2025-07-24 10:11:50,973 - agent.summary - INFO - Initialized with model: openai:gpt-4
+2025-07-24 10:11:50,975 - agent.analysis - INFO - Initialized with model: openai:gpt-4
+2025-07-24 10:11:50,980 - agents.orchestrator_agent - INFO - Registered agent: SearchAgent for type: search
+2025-07-24 10:11:50,980 - agent.orchestrator - INFO - Registered SearchAgent for search tasks
+2025-07-24 10:11:50,981 - agents.orchestrator_agent - INFO - Registered agent: VerificationAgent for type: verification
+2025-07-24 10:11:50,981 - agent.orchestrator - INFO - Registered VerificationAgent for verification tasks
+2025-07-24 10:11:50,981 - agents.orchestrator_agent - INFO - Registered agent: SummaryAgent for type: summary
+2025-07-24 10:11:50,982 - agent.orchestrator - INFO - Registered SummaryAgent for summary tasks
+2025-07-24 10:11:50,982 - agents.orchestrator_agent - INFO - Registered agent: AnalysisAgent for type: analysis
+2025-07-24 10:11:50,982 - agent.orchestrator - INFO - Registered AnalysisAgent for analysis tasks
+2025-07-24 10:11:50,982 - __main__ - INFO - Smart Research Assistant initialized
+2025-07-24 10:11:50,985 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/89bd7a2f-e4e2-4716-8480-47ad13099643.json
+2025-07-24 10:11:50,985 - session_manager - INFO - Created new session: 89bd7a2f-e4e2-4716-8480-47ad13099643
+2025-07-24 10:11:50,986 - __main__ - INFO - Started new research session: 89bd7a2f-e4e2-4716-8480-47ad13099643
+2025-07-24 10:11:50,990 - __main__ - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 10:11:50,991 - agents.orchestrator_agent - INFO - Processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 10:11:50,992 - storage.file_storage_provider - INFO - Loaded session from ./data/sessions/89bd7a2f-e4e2-4716-8480-47ad13099643.json
+2025-07-24 10:11:50,993 - agents.orchestrator_agent - INFO - Restored context for session 89bd7a2f-e4e2-4716-8480-47ad13099643: 0 interactions, 0 findings
+2025-07-24 10:11:50,993 - agents.orchestrator_agent - INFO - Loaded research session: 89bd7a2f-e4e2-4716-8480-47ad13099643
+2025-07-24 10:11:50,993 - agent.orchestrator - INFO - Starting: analyze query requirements for 'analyze and summarize the late...'
+2025-07-24 10:11:50,993 - agent.orchestrator - INFO - Using processing mode: full-processing
+2025-07-24 10:11:50,994 - agent.orchestrator - INFO - Decision: selected agents: search, verification, summary, analysis (Reason: Using full-processing mode - selected all 4 agents)
+2025-07-24 10:11:50,994 - agent.orchestrator - INFO - Completed: analyze query requirements
+2025-07-24 10:11:50,995 - agent.orchestrator - INFO - Starting: coordinate 4 agent(s)
+2025-07-24 10:11:50,995 - agent.orchestrator - INFO - Execution order: search → verification → analysis → summary
+2025-07-24 10:11:50,996 - agent.orchestrator - INFO - Delegating to search agent
+2025-07-24 10:11:50,996 - agent.search - INFO - Starting: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 10:11:50,997 - agent.search - INFO - Executing web search
+2025-07-24 10:11:50,997 - agent.tool - INFO - Searching for: analyze and summarize the latest advancements in AI, and verify the key findings
+2025-07-24 10:11:51,380 - agent.tool - INFO - Received 10 results from search API
+2025-07-24 10:11:51,381 - agent.search - INFO - Extracting structured data from search results
+2025-07-24 10:12:09,097 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 10:12:09,110 - agent.search - INFO - Extracted 5 sources
+2025-07-24 10:12:09,111 - agent.search - INFO - Extracted content: 698 characters
+2025-07-24 10:12:09,111 - agent.search - INFO - Completed: search for: 'analyze and summarize the latest advancements in A...'
+2025-07-24 10:12:09,112 - agent.orchestrator - INFO - search agent completed successfully: The latest advancements in artificial intelligence...
+2025-07-24 10:12:09,113 - agent.orchestrator - INFO - Delegating to verification agent
+2025-07-24 10:12:09,113 - agents.verification_agent - INFO - VerificationAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 10:12:31,883 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 10:12:31,888 - agent.orchestrator - INFO - verification agent completed successfully: Verification for 'analyze and summarize the latest...
+2025-07-24 10:12:31,889 - agent.orchestrator - INFO - Delegating to analysis agent
+2025-07-24 10:12:31,889 - agents.analysis_agent - INFO - AnalysisAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 10:12:47,679 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 10:12:47,698 - agent.orchestrator - INFO - analysis agent completed successfully: Analysis for 'analyze and summarize the latest adv...
+2025-07-24 10:12:47,699 - agent.orchestrator - INFO - Delegating to summary agent
+2025-07-24 10:12:47,700 - agents.summary_agent - INFO - SummaryAgent processing query: analyze and summarize the latest advancements in AI, and verify the key findings...
+2025-07-24 10:12:59,877 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 10:12:59,882 - agent.orchestrator - INFO - summary agent completed successfully: Summary for 'analyze and summarize the latest adva...
+2025-07-24 10:12:59,882 - agent.orchestrator - INFO - Completed: coordinate agents
+2025-07-24 10:12:59,893 - storage.file_storage_provider - INFO - Saved session to ./data/sessions/89bd7a2f-e4e2-4716-8480-47ad13099643.json

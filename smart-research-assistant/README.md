@@ -142,3 +142,58 @@ To compare two versions of a text, use the format `compare versions: [text1] vs 
 ```
 What would you like to research? compare versions: The first version of the text. vs The second version of the text, which is different.
 ```
+
+## Processing Modes
+
+The Smart Research Assistant supports three different processing modes that determine which specialized agents are invoked for a query:
+
+### Search-Only Mode (Default)
+
+In this mode, only the search agent is invoked unless other agents are explicitly requested. This provides faster responses for simple information queries.
+
+```
+What would you like to research? What is quantum computing?
+Find information about renewable energy sources
+```
+
+To explicitly request other agents in search-only mode:
+
+```
+What would you like to research? Search for climate change data and analyze the trends
+Look up recent AI advancements and summarize the findings
+Search for COVID-19 statistics and verify their accuracy
+```
+
+Benefits of search-only mode:
+- **Faster response times** for straightforward information queries
+- **Lower resource usage** since fewer LLM calls are needed
+- **Clear, unprocessed information** for those who prefer to draw their own conclusions
+- **Explicit agent control** by directly requesting verification, analysis, or summarization when needed
+
+### Auto-Detect Mode
+
+This mode uses enhanced query analysis to selectively invoke agents based on clear intent indicators in your query.
+
+```
+What would you like to research? Is it true that coffee prevents cancer?  # Invokes verification
+Give me a summary of the French Revolution  # Invokes summary
+What is the impact of social media on mental health?  # Invokes analysis
+```
+
+### Full-Processing Mode
+
+This mode maintains the behavior of invoking multiple relevant agents for comprehensive research.
+
+```
+What would you like to research? Research the history of electric vehicles
+Compare different machine learning algorithms for image recognition
+Find information about Mars exploration, verify the recent findings, and summarize the key discoveries
+```
+
+To change the processing mode, update the `PROCESSING_MODE` environment variable in your `.env` file:
+
+```
+PROCESSING_MODE=search-only  # Options: search-only, auto-detect, full-processing
+```
+
+You can also see which mode is being used and which agents were involved in your current query by examining the response metadata that appears after each answer.

@@ -18,6 +18,17 @@ class QueryResult(BaseModel):
     verified: bool = False
     metadata: Dict[str, Any] = Field(default_factory=dict)
     timestamp: datetime = Field(default_factory=datetime.now)
+    processing_mode: str = ""
+    agents_invoked: List[str] = Field(default_factory=list)
+    execution_time_ms: int = 0
+    agent_execution_order: List[str] = Field(default_factory=list)
+
+
+class AgentIntent(BaseModel):
+    agent_type: str
+    confidence: float
+    keywords_matched: List[str]
+    explicit_request: bool
 
 
 class ResearchQuery(BaseModel):

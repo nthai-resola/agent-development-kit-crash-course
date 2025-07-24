@@ -168,24 +168,34 @@ class TestOrchestratorAgent:
     
     def test_query_analysis(self, orchestrator):
         """Test query requirement analysis."""
-        # Test search-only query
-        agents = orchestrator._analyze_query_requirements("What is machine learning?")
-        assert "search" in agents
+        # Temporarily set the processing mode to full-processing for testing
+        import config
+        from models.enums import ProcessingMode
+        original_mode = config.Config.PROCESSING_MODE
+        config.Config.PROCESSING_MODE = ProcessingMode.FULL_PROCESSING.value
         
-        # Test query requiring verification
-        agents = orchestrator._analyze_query_requirements("Is this fact accurate?")
-        assert "search" in agents
-        assert "verification" in agents
-        
-        # Test query requiring summary
-        agents = orchestrator._analyze_query_requirements("Summarize the key points")
-        assert "search" in agents
-        assert "summary" in agents
-        
-        # Test query requiring analysis
-        agents = orchestrator._analyze_query_requirements("Analyze this data")
-        assert "search" in agents
-        assert "analysis" in agents
+        try:
+            # Test search-only query
+            required_agents, _ = orchestrator._analyze_query_requirements("What is machine learning?")
+            assert "search" in required_agents
+            
+            # Test query requiring verification
+            required_agents, _ = orchestrator._analyze_query_requirements("Is this fact accurate?")
+            assert "search" in required_agents
+            assert "verification" in required_agents
+            
+            # Test query requiring summary
+            required_agents, _ = orchestrator._analyze_query_requirements("Summarize the key points")
+            assert "search" in required_agents
+            assert "summary" in required_agents
+            
+            # Test query requiring analysis
+            required_agents, _ = orchestrator._analyze_query_requirements("Analyze this data")
+            assert "search" in required_agents
+            assert "analysis" in required_agents
+        finally:
+            # Restore original mode
+            config.Config.PROCESSING_MODE = original_mode
     
     @pytest.mark.asyncio
     async def test_agent_coordination(self, orchestrator_with_agents):
@@ -440,9 +450,9 @@ class TestOrchestratorIntegration:
         """Test a full end-to-end flow with multiple real agents."""
         query = "Search for information about Python, verify it, and then summarize it."
         
-        # Mock the GoogleSearchTool to prevent real API calls
-        with patch('agents.search_agent.GoogleSearchTool') as MockGoogleSearchTool:
-            mock_search_tool_instance = MockGoogleSearchTool.return_value
+        # Mock the SearchTool to prevent real API calls
+        with patch('agents.search_agent.SearchTool') as MockSearchTool:
+            mock_search_tool_instance = MockSearchTool.return_value
             mock_search_tool_instance.search = AsyncMock(return_value=[
                 {"title": "Python", "link": "https://python.org", "snippet": "Official site"}
             ])
@@ -452,7 +462,7 @@ class TestOrchestratorIntegration:
                 from models.data_models import StructuredSearchResult, SearchResult
                 mock_search_run.return_value = StructuredSearchResult(
                     query=query,
-                    results=[SearchResult(title="Python", link="https://python.org", snippet="Official site")],
+                    results=[SearchResult(title="Python", link="https://python.org", snippet="Official site", is_paywalled=False, paywall_reason="")],
                     key_takeaways=["Python is a programming language"],
                     related_topics=["programming"]
                 )

@@ -14,20 +14,24 @@ from datetime import datetime
 # Import will be resolved at runtime when used as a package
 try:
     from .base_agent import BaseResearchAgent
-    from models.data_models import ResearchFinding, UserNote, ResearchSession, ResearchQuery, QueryResult
+    from models.data_models import ResearchFinding, UserNote, ResearchSession, ResearchQuery, QueryResult, AgentIntent
+    from models.enums import ProcessingMode
     from storage.storage_provider import StorageProvider
     from config import Config
     from .specialized_agent import SpecializedAgent
+    from tools.agent_logger import AgentLogger, orchestrator_logger
 except ImportError:
     # For standalone testing
     import sys
     import os
     sys.path.append(os.path.dirname(os.path.dirname(__file__)))
     from agents.base_agent import BaseResearchAgent
-    from models.data_models import ResearchFinding, UserNote, ResearchSession, ResearchQuery, QueryResult
+    from models.data_models import ResearchFinding, UserNote, ResearchSession, ResearchQuery, QueryResult, AgentIntent
+    from models.enums import ProcessingMode
     from storage.storage_provider import StorageProvider
     from config import Config
     from agents.specialized_agent import SpecializedAgent
+    from tools.agent_logger import AgentLogger, orchestrator_logger
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -80,8 +84,12 @@ class OrchestratorAgent(BaseResearchAgent):
             "analysis": ["data_analysis", "visualization", "entity_extraction", "translation"]
         }
         
+        # Initialize agent logger
+        self.agent_logger = orchestrator_logger
+        
         self._initialize_agent()
         logger.info(f"Orchestrator Agent initialized with model: {self.model}")
+        self.agent_logger.info(f"Initialized with model: {self.model}")
     
     def _initialize_agent(self):
         """Initialize the pydantic-ai agent for the orchestrator."""
@@ -104,6 +112,7 @@ class OrchestratorAgent(BaseResearchAgent):
         """
         self.specialized_agents[agent_type] = agent
         logger.info(f"Registered agent: {agent.name} for type: {agent_type}")
+        self.agent_logger.info(f"Registered {agent.name} for {agent_type} tasks")
     
     async def process_query(self, query: str, session_id: str = None) -> Dict[str, Any]:
         """
@@ -135,10 +144,12 @@ class OrchestratorAgent(BaseResearchAgent):
             )
             
             # Analyze query to determine required agents
-            required_agents = self._analyze_query_requirements(query)
+            required_agents, skipped_agents = self._analyze_query_requirements(query)
             
             # Coordinate agent execution
+            start_time = datetime.now()
             agent_results = await self._coordinate_agents(query, required_agents)
+            execution_time = (datetime.now() - start_time).total_seconds()
             
             # Synthesize final response
             response = await self._synthesize_response(query, agent_results)
@@ -151,7 +162,11 @@ class OrchestratorAgent(BaseResearchAgent):
                         content=str(result.get("content", "")),
                         confidence=result.get("confidence", 0.0),
                         verified=result.get("verified", False),
-                        metadata=result.get("metadata", {})
+                        metadata=result.get("metadata", {}),
+                        processing_mode=Config.PROCESSING_MODE,
+                        agents_invoked=list(required_agents),
+                        execution_time_ms=int(execution_time * 1000),
+                        agent_execution_order=required_agents
                     )
                     research_query.results.append(query_result)
             
@@ -168,9 +183,13 @@ class OrchestratorAgent(BaseResearchAgent):
             response_data = {
                 "success": True,
                 "response": response,
+                "processing_mode": Config.PROCESSING_MODE,
+                "agents_used": list(required_agents),
+                "agents_available": list(self.specialized_agents.keys()),
+                "agents_skipped": skipped_agents,
+                "execution_time": execution_time,
                 "session_id": session_id,
                 "query_id": research_query.query_id,
-                "agents_used": list(required_agents),
                 "timestamp": datetime.now().isoformat()
             }
             
@@ -423,112 +442,110 @@ class OrchestratorAgent(BaseResearchAgent):
             agent_type: agent.name 
             for agent_type, agent in self.specialized_agents.items()
         }
+
+    def _determine_processing_mode(self, query: str, context: Dict[str, Any]) -> ProcessingMode:
+        """Determines which mode to use for a specific query"""
+        # This can be extended to be more context-aware
+        return ProcessingMode(Config.PROCESSING_MODE)
+
+    def _analyze_query_intent(self, query: str) -> List[AgentIntent]:
+        """Enhanced query analysis with stricter criteria"""
+        intents = []
+        if self._has_strong_verification_intent(query):
+            intents.append(AgentIntent(agent_type="verification", confidence=0.9, keywords_matched=[], explicit_request=False))
+        if self._has_strong_summary_intent(query):
+            intents.append(AgentIntent(agent_type="summary", confidence=0.9, keywords_matched=[], explicit_request=False))
+        if self._has_strong_analysis_intent(query):
+            intents.append(AgentIntent(agent_type="analysis", confidence=0.9, keywords_matched=[], explicit_request=False))
+        return intents
+
+    def _has_strong_verification_intent(self, query: str) -> bool:
+        """Use enhanced detection with stricter criteria for verification."""
+        keywords = ["verify", "fact-check", "is this true", "is this accurate"]
+        return any(keyword in query.lower() for keyword in keywords)
+
+    def _has_strong_summary_intent(self, query: str) -> bool:
+        """Use enhanced detection with stricter criteria for summary."""
+        keywords = ["summarize", "tldr", "key points", "give me a summary"]
+        return any(keyword in query.lower() for keyword in keywords)
+
+    def _has_strong_analysis_intent(self, query: str) -> bool:
+        """Use enhanced detection with stricter criteria for analysis."""
+        keywords = ["analyze", "what is the impact of", "compare and contrast"]
+        return any(keyword in query.lower() for keyword in keywords)
+
+    def _get_explicit_agent_requests(self, query: str) -> List[str]:
+        """Extracts explicit agent requests from query"""
+        requests = []
+        if "analyze" in query.lower():
+            requests.append("analysis")
+        if "summarize" in query.lower():
+            requests.append("summary")
+        if "verify" in query.lower():
+            requests.append("verification")
+        return requests
+
+    def _get_required_agents_search_only(self, query: str) -> (List[str], List[str]):
+        """Return only search agent unless explicitly requested otherwise."""
+        explicit_requests = self._get_explicit_agent_requests(query)
+        required_agents = ["search"] + explicit_requests
+        skipped_agents = [agent for agent in self.specialized_agents if agent not in required_agents]
+        return required_agents, skipped_agents
+
+    def _get_required_agents_auto_detect(self, query: str) -> (List[str], List[str]):
+        """Use enhanced detection with stricter criteria."""
+        required_agents = ["search"]
+        
+        # More restrictive keyword matching
+        if self._has_strong_verification_intent(query):
+            required_agents.append("verification")
+        if self._has_strong_summary_intent(query):
+            required_agents.append("summary")
+        if self._has_strong_analysis_intent(query):
+            required_agents.append("analysis")
+        
+        skipped_agents = [agent for agent in self.specialized_agents if agent not in required_agents]
+        return list(set(required_agents)), skipped_agents
+
+    def _get_required_agents_full_processing(self, query: str) -> (List[str], List[str]):
+        """Maintain current behavior of invoking multiple agents"""
+        # This is a simplified version of the original logic
+        required_agents = ["search", "verification", "summary", "analysis"]
+        return required_agents, []
     
-    def _analyze_query_requirements(self, query: str) -> List[str]:
+    def _analyze_query_requirements(self, query: str) -> (List[str], List[str]):
         """
-        Analyze a query to determine which specialized agents are needed.
+        Analyze a query to determine which specialized agents are needed based on processing mode.
         
         Args:
             query: The user's research query
             
         Returns:
-            List of agent types that should be involved in processing this query
+            A tuple containing a list of required agent types and a list of skipped agent types.
         """
-        # Enhanced query analysis with more sophisticated pattern matching
-        query_lower = query.lower()
-        required_agents = []
+        self.agent_logger.start(f"analyze query requirements for '{query[:30]}...'")
         
-        # Context-aware agent selection based on query intent and session state
+        mode = self._determine_processing_mode(query, self.session_context)
+        self.agent_logger.info(f"Using processing mode: {mode.value}")
         
-        # Search agent is needed for most queries, but not all
-        search_keywords = [
-            "find", "search", "look up", "information", "data", "research", 
-            "gather", "collect", "discover", "locate", "sources"
-        ]
-        search_patterns = [
-            "what is", "who is", "where is", "when did", "how does", 
-            "tell me about", "find information", "learn about"
-        ]
+        if mode == ProcessingMode.SEARCH_ONLY:
+            required, skipped = self._get_required_agents_search_only(query)
+            reason = f"Using search-only mode - selected {len(required)} agent(s)"
+        elif mode == ProcessingMode.AUTO_DETECT:
+            required, skipped = self._get_required_agents_auto_detect(query)
+            reason = f"Using auto-detect mode - detected intent for {len(required)} agent(s)"
+        elif mode == ProcessingMode.FULL_PROCESSING:
+            required, skipped = self._get_required_agents_full_processing(query)
+            reason = f"Using full-processing mode - selected all {len(required)} agents"
+        else:
+            # Fallback to search-only mode for invalid configurations
+            required, skipped = self._get_required_agents_search_only(query)
+            reason = f"Fallback to search-only mode - selected {len(required)} agent(s)"
         
-        # Default to including search unless it's clearly not needed
-        needs_search = True
+        self.agent_logger.decision(f"selected agents: {', '.join(required)}", reason)
+        self.agent_logger.complete("analyze query requirements")
         
-        # If we have an active session with accumulated findings and the query
-        # is only about summarizing or analyzing existing information, we might not need search
-        if self.current_session and self.current_session.findings:
-            if "existing" in query_lower or "findings" in query_lower:
-                if not any(keyword in query_lower for keyword in search_keywords):
-                    needs_search = False
-        
-        if needs_search:
-            required_agents.append("search")
-        
-        # Verification agent detection with enhanced patterns
-        verification_keywords = [
-            "verify", "fact", "check", "accurate", "reliable", "source", "credible",
-            "trustworthy", "validate", "confirm", "authentic", "legitimate", "true",
-            "false", "misleading", "accuracy", "correct", "incorrect", "wrong"
-        ]
-        verification_patterns = [
-            "is it true", "is this accurate", "can you verify", "fact check", 
-            "is this correct", "how reliable", "is this source", "can i trust"
-        ]
-        
-        if any(keyword in query_lower for keyword in verification_keywords) or \
-           any(pattern in query_lower for pattern in verification_patterns):
-            required_agents.append("verification")
-        
-        # Summary agent detection with enhanced patterns
-        summary_keywords = [
-            "summarize", "summary", "overview", "organize", "key points", "brief",
-            "digest", "condense", "shorten", "main ideas", "takeaways", "highlights",
-            "outline", "recap", "tldr", "synopsis", "abstract", "extract"
-        ]
-        summary_patterns = [
-            "give me a summary", "summarize this", "what are the key points",
-            "main takeaways", "brief overview", "in summary", "to summarize",
-            "can you condense", "highlight the important"
-        ]
-        
-        if any(keyword in query_lower for keyword in summary_keywords) or \
-           any(pattern in query_lower for pattern in summary_patterns):
-            required_agents.append("summary")
-        
-        # Analysis agent detection with enhanced patterns
-        analysis_keywords = [
-            "analyze", "analysis", "data", "statistics", "chart", "graph", "translate",
-            "compare", "contrast", "evaluate", "assess", "interpret", "examine",
-            "investigate", "explore", "visualize", "visualization", "trend", "pattern",
-            "correlation", "causation", "relationship", "insight", "metric"
-        ]
-        analysis_patterns = [
-            "analyze this", "what does the data show", "create a chart", 
-            "visualize this", "translate this", "compare these", "find patterns",
-            "identify trends", "statistical analysis", "data interpretation"
-        ]
-        
-        if any(keyword in query_lower for keyword in analysis_keywords) or \
-           any(pattern in query_lower for pattern in analysis_patterns):
-            required_agents.append("analysis")
-        
-        # Consider session context for agent selection
-        if self.current_session:
-            # If we have active research findings, we might need summary or analysis
-            if self.current_session.findings and "summary" not in required_agents and \
-               ("findings" in query_lower or "results" in query_lower):
-                required_agents.append("summary")
-            
-            # If the query references previous information, we might need verification
-            if "previous" in query_lower or "earlier" in query_lower or "before" in query_lower:
-                if "verification" not in required_agents:
-                    required_agents.append("verification")
-        
-        # Ensure we have at least one agent
-        if not required_agents:
-            required_agents.append("search")  # Default to search if no clear intent
-        
-        logger.debug(f"Enhanced query analysis determined required agents: {required_agents}")
-        return required_agents
+        return required, skipped
     
     async def _coordinate_agents(self, query: str, required_agents: List[str]) -> Dict[str, Dict[str, Any]]:
         """
@@ -544,18 +561,22 @@ class OrchestratorAgent(BaseResearchAgent):
         Returns:
             Dictionary mapping agent types to their results
         """
+        self.agent_logger.start(f"coordinate {len(required_agents)} agent(s)")
         results = {}
         
         # Determine execution order based on dependencies
         # For example, search should generally come before verification
         execution_order = self._determine_agent_execution_order(required_agents)
+        self.agent_logger.info(f"Execution order: {' → '.join(execution_order)}")
         
         # Execute agents in the determined order
         for agent_type in execution_order:
+            if agent_type not in required_agents:
+                continue
             try:
                 if agent_type in self.specialized_agents:
                     agent = self.specialized_agents[agent_type]
-                    logger.debug(f"Executing {agent_type} agent for query")
+                    self.agent_logger.info(f"Delegating to {agent_type} agent")
                     
                     # Prepare enhanced context for the specialized agent
                     agent_context = self._prepare_agent_context(query, agent_type, results)
@@ -566,6 +587,7 @@ class OrchestratorAgent(BaseResearchAgent):
                     # Validate result structure
                     if not isinstance(result, dict) or "success" not in result:
                         logger.warning(f"{agent_type} agent returned invalid result structure")
+                        self.agent_logger.error(f"{agent_type} agent returned invalid result structure")
                         result = {
                             "success": False,
                             "error": f"Invalid result structure from {agent_type} agent",
@@ -573,9 +595,17 @@ class OrchestratorAgent(BaseResearchAgent):
                         }
                     
                     results[agent_type] = result
+                    
+                    # Log success or failure
+                    if result.get("success", False):
+                        content_preview = result.get("content", "")[:50] + "..." if len(result.get("content", "")) > 50 else result.get("content", "")
+                        self.agent_logger.info(f"{agent_type} agent completed successfully: {content_preview}")
+                    else:
+                        self.agent_logger.error(f"{agent_type} agent failed: {result.get('error', 'Unknown error')}")
                         
                 else:
                     logger.warning(f"Required agent not registered: {agent_type}")
+                    self.agent_logger.error(f"Required agent not registered: {agent_type}")
                     results[agent_type] = {
                         "success": False,
                         "error": f"Agent {agent_type} not available",
@@ -584,12 +614,15 @@ class OrchestratorAgent(BaseResearchAgent):
                     
             except Exception as e:
                 logger.error(f"Error executing {agent_type} agent: {str(e)}")
+                self.agent_logger.error(f"Error executing {agent_type} agent", e)
                 results[agent_type] = {
                     "success": False,
                     "error": str(e),
                     "content": ""
                 }
         
+        await self._compensate_for_failed_agents(query, results, required_agents)
+        self.agent_logger.complete(f"coordinate agents", f"{sum(1 for r in results.values() if r.get('success', False))}/{len(required_agents)} succeeded")
         return results
         
     def _determine_agent_execution_order(self, required_agents: List[str]) -> List[str]:
@@ -611,29 +644,15 @@ class OrchestratorAgent(BaseResearchAgent):
         
         # Start with search if it's required
         ordered_agents = []
-        remaining_agents = set(required_agents)
+        all_agents = list(self.specialized_agents.keys())
         
-        # First add agents with no dependencies
-        for agent in required_agents:
-            if agent not in dependencies or not any(dep in required_agents for dep in dependencies.get(agent, [])):
-                if agent in remaining_agents:
-                    ordered_agents.append(agent)
-                    remaining_agents.remove(agent)
+        # A simple fixed order is sufficient for now and less prone to cycles
+        fixed_order = ["search", "verification", "analysis", "summary"]
         
-        # Then add agents with dependencies
-        while remaining_agents:
-            for agent in list(remaining_agents):
-                deps = dependencies.get(agent, [])
-                if not deps or all(dep not in remaining_agents for dep in deps):
-                    ordered_agents.append(agent)
-                    remaining_agents.remove(agent)
-                    break
-            else:
-                # If we can't satisfy all dependencies, just add the remaining agents
-                # This can happen if there are circular dependencies
-                ordered_agents.extend(list(remaining_agents))
-                break
-        
+        for agent in fixed_order:
+            if agent in required_agents:
+                ordered_agents.append(agent)
+
         logger.debug(f"Agent execution order: {ordered_agents}")
         return ordered_agents
     
@@ -784,15 +803,20 @@ class OrchestratorAgent(BaseResearchAgent):
             return
         
         logger.info(f"Compensating for failed agents: {failed_agents}")
+        self.agent_logger.info(f"Compensating for failed agents: {', '.join(failed_agents)}")
         
         # Try to compensate for specific agent failures
         for failed_agent in failed_agents:
             # If search failed but was required, this is critical
             if failed_agent == "search":
                 # Add a note to the results explaining the limitation
-                results["search"]["content"] = "I wasn't able to search for information on this topic. " \
-                                             "Please try again later or rephrase your query."
-                results["search"]["compensated"] = True
+                results["search"] = {
+                    "success": False, # Keep it as failed
+                    "content": "I wasn't able to search for information on this topic. " \
+                                             "Please try again later or rephrase your query.",
+                    "compensated": True
+                }
+                self.agent_logger.info("Added compensation message for failed search")
             
             # If verification failed but search succeeded, we can still provide unverified results
             elif failed_agent == "verification" and "search" in results and results["search"].get("success", False):
@@ -804,6 +828,7 @@ class OrchestratorAgent(BaseResearchAgent):
                     "verified": False,
                     "compensated": True
                 }
+                self.agent_logger.info("Added unverified results disclaimer for failed verification")
             
             # If summary failed but search succeeded, we can provide raw results
             elif failed_agent == "summary" and "search" in results and results["search"].get("success", False):
@@ -813,6 +838,7 @@ class OrchestratorAgent(BaseResearchAgent):
                     "confidence": 0.4,
                     "compensated": True
                 }
+                self.agent_logger.info("Added basic key points note for failed summary")
             
             # If analysis failed, we can suggest manual analysis
             elif failed_agent == "analysis":
@@ -823,7 +849,10 @@ class OrchestratorAgent(BaseResearchAgent):
                     "confidence": 0.2,
                     "compensated": True
                 }
-    
+                self.agent_logger.info("Added manual analysis suggestion for failed analysis")
+            
+            self.agent_logger.decision(f"compensated for failed {failed_agent} agent")
+
     async def _synthesize_response(self, query: str, agent_results: Dict[str, Dict[str, Any]]) -> str:
         """
         Synthesize a coherent response from multiple agent results.
@@ -851,6 +880,9 @@ class OrchestratorAgent(BaseResearchAgent):
         
         # If all agents failed, return a helpful error message
         if not successful_agents:
+            # Check for compensated search failure
+            if "search" in agent_results and agent_results["search"].get("compensated"):
+                return agent_results["search"]["content"]
             return "I apologize, but I wasn't able to process your query successfully. " \
                    "Please try rephrasing your question or check if all required services are available."
         

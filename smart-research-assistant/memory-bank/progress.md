@@ -8,6 +8,10 @@
 - **CLI Interface**: A basic CLI is functional and can accept user input.
 - **Logging**: A logging system is configured to output to both a file and the console.
 - **Search Agent**: The `SearchAgent` has been updated to correctly use the pydantic-ai API for extracting structured data from search results and has been successfully tested.
+- **Configurable Processing Modes**: The orchestrator now supports `search-only`, `auto-detect`, and `full-processing` modes, with `search-only` as the default to improve efficiency.
+- **Enhanced Orchestrator Logic**: The `OrchestratorAgent` has been updated with more sophisticated query analysis, conditional agent coordination, and graceful error handling.
+- **Complete Search-Only Implementation**: Fully implemented and tested search-only mode to streamline simple information retrieval queries and improve performance.
+- **Terminal Agent Logging**: Added detailed agent logging to the terminal with configurable verbosity, allowing users to see agents' activities and decision-making processes during research tasks.
 
 ## What's Left to Build
 
@@ -30,4 +34,7 @@
 - The choice of a file-based storage provider is a good starting point, but a more robust solution (e.g., a database) may be needed in the future.
 - The focus on a CLI-first approach is a good way to get the core logic working before potentially adding a graphical interface.
 - Replaced Google Custom Search with SerpAPI for more reliable search functionality and better result parsing.
-- Improved the search prompt to provide more detailed instructions for the LLM, resulting in better structured data extraction. 
+- Improved the search prompt to provide more detailed instructions for the LLM, resulting in better structured data extraction.
+- Introduced configurable processing modes to allow for more flexible and efficient query handling, defaulting to a search-only mode for faster response times on simple queries.
+- Enhanced the search agent's error handling and result processing to ensure more consistent and reliable information retrieval.
+- Added terminal agent logging to provide users with visibility into the research process and better understand how different agents contribute to the final result. 

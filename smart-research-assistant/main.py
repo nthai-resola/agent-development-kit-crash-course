@@ -4,6 +4,8 @@ Main entry point for the Smart Research Assistant.
 
 import asyncio
 import logging
+import argparse
+import os
 from typing import Optional
 
 from config import Config
@@ -19,6 +21,8 @@ from session_manager import SessionManager
 from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
+from rich.text import Text
+from tools.agent_logger import AgentLogLevel
 
 
 def setup_logging():
@@ -31,6 +35,30 @@ def setup_logging():
             logging.StreamHandler()
         ]
     )
+
+
+def parse_args():
+    """Parse command line arguments."""
+    parser = argparse.ArgumentParser(description='Smart Research Assistant')
+    
+    # Agent logging options
+    parser.add_argument('--agent-log', choices=['none', 'basic', 'info', 'debug'], 
+                      default=os.environ.get('AGENT_LOG_LEVEL', 'info').lower(),
+                      help='Agent logging level (default: info)')
+    
+    parser.add_argument('--hide-agent-logs', action='store_true',
+                      help='Hide agent logs from terminal output')
+    
+    # Processing mode options
+    parser.add_argument('--mode', choices=['search-only', 'auto-detect', 'full-processing'],
+                      default=os.environ.get('PROCESSING_MODE', 'search-only'),
+                      help='Processing mode (default: search-only)')
+    
+    # Non-interactive mode
+    parser.add_argument('--topic', type=str, help='Topic for a new research session in non-interactive mode')
+    parser.add_argument('--query', type=str, help='Query to process in non-interactive mode')
+
+    return parser.parse_args()
 
 
 class SmartResearchAssistant:
@@ -126,13 +154,51 @@ class SmartResearchAssistant:
 
 async def main_cli():
     """Main function for running the Smart Research Assistant CLI."""
+    # Parse command line arguments
+    args = parse_args()
+    
+    # Update configuration based on command line arguments
+    Config.AGENT_LOG_LEVEL = args.agent_log.upper()
+    Config.AGENT_LOG_TO_TERMINAL = not args.hide_agent_logs
+    Config.PROCESSING_MODE = args.mode
+    
+    # Setup logging
     setup_logging()
     console = Console()
     
     try:
+        # Display banner with mode information
+        title_style = "bold green"
+        console.print(Panel(
+            Text("Smart Research Assistant", style=title_style),
+            subtitle=f"Processing Mode: {Config.PROCESSING_MODE} | Agent Logs: {'HIDDEN' if args.hide_agent_logs else args.agent_log.upper()}"
+        ))
+        
         assistant = SmartResearchAssistant()
-        console.print(Panel("Welcome to the Smart Research Assistant!", title="[bold green]SRA[/bold green]"))
 
+        # Non-interactive mode
+        if args.query:
+            topic = args.topic or "Non-interactive Session"
+            await assistant.start_session(topic)
+            console.print(f"Started new session: {topic}")
+
+            with console.status("[bold green]Researching...[/bold green]"):
+                result = await assistant.process_query(args.query)
+
+            if result["success"]:
+                console.print(Panel(result["response"], title="[bold blue]Research Results[/bold blue]"))
+                
+                # Display summary of agents used
+                if not args.hide_agent_logs:
+                    agents_text = ", ".join(result.get("agents_used", []))
+                    console.print(Text(f"Agents used: {agents_text}", style="dim"))
+            else:
+                # Enhanced error display for non-interactive mode
+                error_message = result.get("error", "Unknown error")
+                console.print(Panel(f"I apologize, but I wasn't able to process your query successfully. Error: {error_message}", title="[bold red]Research Results[/bold red]"))
+            return
+
+        # Interactive mode
         sessions = await assistant.session_manager.list_sessions()
         if sessions:
             console.print("Available sessions:")
@@ -159,6 +225,11 @@ async def main_cli():
 
             if result["success"]:
                 console.print(Panel(result["response"], title="[bold blue]Research Results[/bold blue]"))
+                
+                # Display summary of agents used
+                if not args.hide_agent_logs:
+                    agents_text = ", ".join(result.get("agents_used", []))
+                    console.print(Text(f"Agents used: {agents_text}", style="dim"))
             else:
                 # Enhanced error display with more specific messages
                 error_message = result.get("error", "Unknown error")

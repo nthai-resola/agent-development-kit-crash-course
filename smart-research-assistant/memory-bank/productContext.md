@@ -13,4 +13,12 @@ Our vision is to create an intelligent assistant that acts as a partner in the r
 - **Intuitive Interaction**: The CLI should be simple and natural to use.
 - **Trustworthy Results**: Users should feel confident in the accuracy and reliability of the information provided.
 - **Seamless Workflow**: The session management feature should make it easy to stop and start research tasks without losing context.
-- **Actionable Insights**: The assistant should provide more than just raw data; it should deliver summarized findings and analysis that help users make informed decisions. 
+- **Actionable Insights**: The assistant should provide more than just raw data; it should deliver summarized findings and analysis that help users make informed decisions.
+- **Efficiency-Focused**: With the implementation of search-only mode, users can get quick answers to straightforward questions without unnecessary processing.
+- **Flexible Processing**: Users can explicitly request additional services like verification or summarization when needed, giving them control over the depth of processing.
+
+## User Personas
+
+- **Quick Researcher**: Needs fast, direct answers to simple questions without excessive processing or analysis. Benefits greatly from search-only mode.
+- **Deep Researcher**: Requires comprehensive evaluation, verification, and synthesis of information. May prefer auto-detect or full-processing modes.
+- **Critical Evaluator**: Focuses on fact-checking and source verification. Can explicitly request verification in search-only mode. 
