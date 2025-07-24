@@ -12,6 +12,7 @@
 - **Enhanced Orchestrator Logic**: The `OrchestratorAgent` has been updated with more sophisticated query analysis, conditional agent coordination, and graceful error handling.
 - **Complete Search-Only Implementation**: Fully implemented and tested search-only mode to streamline simple information retrieval queries and improve performance.
 - **Terminal Agent Logging**: Added detailed agent logging to the terminal with configurable verbosity, allowing users to see agents' activities and decision-making processes during research tasks.
+- **Specialized Agents**: The `Verification`, `Summary`, and `Analysis` agents have been fixed and are now fully functional.
 
 ## What's Left to Build
 
@@ -37,4 +38,5 @@
 - Improved the search prompt to provide more detailed instructions for the LLM, resulting in better structured data extraction.
 - Introduced configurable processing modes to allow for more flexible and efficient query handling, defaulting to a search-only mode for faster response times on simple queries.
 - Enhanced the search agent's error handling and result processing to ensure more consistent and reliable information retrieval.
-- Added terminal agent logging to provide users with visibility into the research process and better understand how different agents contribute to the final result. 
+- Added terminal agent logging to provide users with visibility into the research process and better understand how different agents contribute to the final result.
+- Corrected the implementation of the specialized agents to ensure they are fully functional and correctly interact with the `pydantic-ai` library. 
